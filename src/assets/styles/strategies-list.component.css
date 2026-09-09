@@ -1,0 +1,107 @@
+.strategies-page {
+  background: #202326;
+  color: white;
+  min-height: 100%;
+}
+.strategy-hero {
+  min-height: 320px;
+  background-size: cover;
+  background-position: center;
+}
+.strategy-hero-overlay {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.62);
+}
+.strategy-hero h1 {
+  margin: 0;
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+.create-strategy {
+  padding: 12px 20px;
+  background: #db9e15;
+  color: #111;
+  text-decoration: none;
+  font-weight: bold;
+}
+.strategy-content {
+  padding: 36px 40px;
+}
+.strategy-content h2 {
+  color: #db9e15;
+}
+.strategy-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.strategy-filters input,
+.strategy-filters select {
+  padding: 10px;
+  background: #16191c;
+  border: 1px solid #444;
+  color: white;
+}
+.strategy-filters label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.strategy-card {
+  position: relative;
+  min-height: 150px;
+  padding: 18px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+.strategy-card h3 {
+  margin: 0 32px 12px 0;
+}
+.strategy-card p {
+  color: #aaa;
+}
+.favorite-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  color: #db9e15;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.agent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.agent-list span {
+  padding: 4px 8px;
+  background: #db9e15;
+  color: #111;
+  font-size: 0.8rem;
+}
+.skeleton {
+  min-height: 150px;
+  animation: pulse 1.2s infinite alternate;
+}
+@keyframes pulse {
+  from {
+    background: #171717;
+  }
+  to {
+    background: #252525;
+  }
+}

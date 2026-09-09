@@ -5,14 +5,14 @@ const AuthContext = createContext();
 function AuthWrapper({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // pour éviter un "flash" avant la vérification
+  const [isLoadingContext, setIsLoadingContext] = useState(true); // pour éviter un "flash" avant la vérification
 
   const verifyUser = async () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
       setIsLoggedIn(false);
-      setIsLoading(false);
+      setIsLoadingContext(false);
       return;
     }
 
@@ -26,19 +26,24 @@ function AuthWrapper({ children }) {
       }
 
       const data = await response.json();
+
+      console.log(data);
+
       setIsLoggedIn(true);
-      setLoggedUserId(data.user.id);
+      setLoggedUserId(data.payload.id);
+    
     } catch (err) {
+        console.log(err);
       localStorage.removeItem('token');
       setIsLoggedIn(false);
       setLoggedUserId(null);
     } finally {
-      setIsLoading(false);
+      setIsLoadingContext(false);
     }
   };
 
   useEffect(() => {
-    await verifyUser();
+    verifyUser();
   }, []);
 
   const passedContext = {
@@ -46,7 +51,7 @@ function AuthWrapper({ children }) {
     setIsLoggedIn,
     loggedUserId,
     setLoggedUserId,
-    isLoading,
+    isLoadingContext,
     verifyUser,
   };
 

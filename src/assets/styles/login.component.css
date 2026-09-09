@@ -28,7 +28,9 @@ input {
 }
 input:focus { border-color: #db9e15; }
 
-button {
+.button-connexion {
+    width: 100%;
+    padding: 1rem;
     background: #db9e15;
     border: none;
     color: black;
@@ -36,8 +38,8 @@ button {
     cursor: pointer;
     transition: 0.2s;
 }
-button:hover { background: #f0ad1a; }
-button:disabled { background: #555; cursor: not-allowed; }
+.button-connexion:hover { background: #f0ad1a; }
+.button-connexion:disabled { background: #555; cursor: not-allowed; }
 .error-msg { color: #ff4d4d; font-size: 0.85rem; margin-bottom: 1rem; }
 
 

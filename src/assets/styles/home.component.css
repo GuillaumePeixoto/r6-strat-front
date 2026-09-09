@@ -1,0 +1,94 @@
+.home-container {
+    padding: 40px;
+    color: white;
+}
+
+.gold { color: #db9e15; }
+
+.maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.map-card {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #333;
+    position: relative;
+    transition: transform 0.3s ease;
+    border-radius: 4px 4px 0 0;
+}
+
+.map-card-wrapper {
+    transition: transform 0.5s ease;
+}
+
+.map-card-wrapper:hover .map-card {
+    border-color: #db9e15;
+}
+
+.map-card-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.map-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    padding: 20px 15px 10px;
+}
+
+.map-title {
+    margin: 0;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.map-footer {
+    background: #16191c;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #333;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+.map-stats {
+    display: flex;
+    flex-direction: column;
+}
+
+.count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #db9e15;
+}
+
+.label {
+    font-size: 0.7rem;
+    color: #888;
+}
+
+.btn-select {
+    background: transparent;
+    border: 1px solid #db9e15;
+    color: #db9e15;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.btn-select:hover {
+    background: #db9e15;
+    color: black;
+}

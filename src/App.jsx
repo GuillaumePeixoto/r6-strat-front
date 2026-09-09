@@ -18,9 +18,9 @@ function App() {
       <div className="min-screen-height">
         <Routes>
           <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>}></Route>
-          <Route path="/login" element={<Login isAuthenticated={!!localStorage.getItem('token')} isAdmin={false} onLogout={() => localStorage.removeItem('token')} />}></Route>
+          <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<RegisterPage></RegisterPage>} />
-          <Route path="/strategies" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
+          <Route path="/map/:slugMap" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
           {/* <Route path="/strategies/:gameId" element={<ProtectedRoute><DetailStrategyPage /></ProtectedRoute>}></Route>
           <Route path="/strategies/update/:strategyId" element={<ProtectedRoute><AddingStrategyPage /></ProtectedRoute>}></Route>
           <Route path="/add-strategy" element={<ProtectedRoute><AddingStrategyPage /></ProtectedRoute>}></Route> */}

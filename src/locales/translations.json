@@ -14,7 +14,8 @@
     },
     "username": "Utilisateur",
     "password": "Mot de passe",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "no-data-founded": "Aucune donnée n'a été trouvée."
   },
   "en": {
     "login": {
@@ -31,6 +32,7 @@
     },
     "username": "Username",
     "password": "Password",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "no-data-founded": "No data was found."
   }
 }

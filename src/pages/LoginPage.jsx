@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./../assets/styles/login.component.css";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import { useContext } from 'react';
-import { AuthContext } from './../context/auth.context';
+import { useContext } from "react";
+import { AuthContext } from "./../context/auth.context";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { t } = useTranslation();
-  const { setIsLoggedIn, setLoggedUserId } = useContext(AuthContext);
+  const { isLoggedIn, isLoadingContext, setIsLoggedIn, setLoggedUserId } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
     username: "",
-    password: ""
+    password: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,18 +28,19 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, 
-        {username: credentials.username, password: credentials.password},
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        { username: credentials.username, password: credentials.password },
       );
 
       console.log(response);
 
       if (response.status != 200) {
-        setError(response.data.message || "Erreur de connexion")
+        setError(response.data.message || "Erreur de connexion");
       }
 
       localStorage.setItem("token", response.data.token);
-      setLoggedUserId(response.data.payload._id);
+      setLoggedUserId(response.data.payload.id);
       setIsLoggedIn(true);
       navigate("/");
       // redirection à ajouter ici selon ton système de routing
@@ -49,6 +50,16 @@ function Login() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isLoadingContext && isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoadingContext, isLoggedIn, navigate]);
+
+  if(isLoadingContext){
+    return(<h2>Essaie une auto connexion</h2>)
+  }
 
   return (
     <div className="login-page">
@@ -84,7 +95,7 @@ function Login() {
 
           {error && <p className="error-msg">{error}</p>}
 
-          <button type="submit" disabled={isLoading}>
+          <button type="submit" className="button-connexion" disabled={isLoading}>
             {isLoading ? t("loading") : t("login.title-button")}
           </button>
         </form>

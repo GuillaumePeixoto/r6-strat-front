@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { AuthContext } from "./../context/auth.context";
 
 function RegisterPage() {
+  const { isLoggedIn, isLoadingContext} =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -15,7 +18,6 @@ function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (e) => {
-
     e.preventDefault();
 
     setError("");
@@ -26,7 +28,7 @@ function RegisterPage() {
       return;
     }
 
-    if(password != repeatPassword){
+    if (password != repeatPassword) {
       setError("");
       setIsLoading(false);
       return;
@@ -35,7 +37,7 @@ function RegisterPage() {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         username,
-        password
+        password,
       });
       navigate("/login");
     } catch (err) {
@@ -43,6 +45,12 @@ function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isLoadingContext && isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoadingContext, isLoggedIn, navigate]);
 
   return (
     <div className="login-page">
@@ -91,7 +99,7 @@ function RegisterPage() {
 
           {error && <p className="error-msg">{error}</p>}
 
-          <button type="submit" disabled={isLoading}>
+          <button type="submit" className="button-connexion" disabled={isLoading}>
             {isLoading ? t("loading") : t("register.title-button")}
           </button>
         </form>
