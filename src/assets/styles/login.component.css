@@ -27,9 +27,8 @@ input {
     outline: none;
 }
 input:focus { border-color: #db9e15; }
+
 button {
-    width: 100%;
-    padding: 1rem;
     background: #db9e15;
     border: none;
     color: black;

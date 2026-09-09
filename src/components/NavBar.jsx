@@ -8,14 +8,19 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import MenuLogo from './../assets/styles/img/menu-icon.jpg';
+import { AuthContext } from "./../context/auth.context";
+import MenuLogo from "./../assets/img/menu-icon.jpg";
+import ProfileLogo from "./../assets/img/profile-icon.jpg";
 
-function NavBar({ isAuthenticated, isAdmin, onLogout }) {
+function NavBar() {
+  const { isLoggedIn, isAdmin, setIsLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    onLogout();
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
     navigate("/login");
   };
 
@@ -40,25 +45,21 @@ function NavBar({ isAuthenticated, isAdmin, onLogout }) {
 
               {/* Logo et menu desktop */}
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <NavLink className="flex shrink-0 items-center" to="/home">
-                  <img
-                    className="h-14"
-                    src={MenuLogo}
-                    alt="Logo site"
-                  />
+                <NavLink className="flex shrink-0 items-center" to="/">
+                  <img className="h-14" src={MenuLogo} alt="Logo site" />
                 </NavLink>
               </div>
 
               {/* Icône notifications + profil */}
               <div className="absolute h-full inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {isAuthenticated ? (
+                {isLoggedIn ? (
                   <Menu as="div" className="hidden sm:block relative ml-3">
                     <div>
                       <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 rounded-full"
-                          src="/assets/img/profile-icon.jpg"
+                          src={ProfileLogo}
                           alt="Profile"
                         />
                       </MenuButton>
@@ -102,13 +103,17 @@ function NavBar({ isAuthenticated, isAdmin, onLogout }) {
                   <div className="hidden h-full sm:flex items-center gap-2">
                     <NavLink
                       to="/login"
-                      className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                      className={({ isActive }) =>
+                        `nav-link ${isActive ? "active" : ""}`
+                      }
                     >
                       Connexion
                     </NavLink>
                     <NavLink
                       to="/register"
-                      className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                      className={({ isActive }) =>
+                        `nav-link ${isActive ? "active" : ""}`
+                      }
                     >
                       Inscription
                     </NavLink>
@@ -121,7 +126,7 @@ function NavBar({ isAuthenticated, isAdmin, onLogout }) {
           {/* Menu mobile */}
           <DisclosurePanel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {isAuthenticated && (
+              {isLoggedIn && (
                 <>
                   <NavLink
                     to="/profile"

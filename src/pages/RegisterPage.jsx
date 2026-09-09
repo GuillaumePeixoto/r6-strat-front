@@ -12,20 +12,35 @@ function RegisterPage() {
   const [repeatPassword, setRepeatPassword] = useState("");
 
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+
+    e.preventDefault();
+
     setError("");
     setIsLoading(true);
-    if (!username || !password) {
+    if (!username || !password || !repeatPassword) {
       setError("You need to complete the form.");
+      setIsLoading(false);
+      return;
+    }
+
+    if(password != repeatPassword){
+      setError("");
+      setIsLoading(false);
+      return;
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+        username,
+        password
+      });
       navigate("/login");
     } catch (err) {
       setError("Une erreur s'est produite : " + err.message);
+      setIsLoading(false);
     }
   };
 
@@ -45,7 +60,7 @@ function RegisterPage() {
               name="username"
               placeholder={t("register.username-placeholder")}
               value={username}
-              onChange={() => setUsername()}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
@@ -57,7 +72,7 @@ function RegisterPage() {
               name="password"
               placeholder={t("register.password-placeholder")}
               value={password}
-              onChange={() => setPassword}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -69,7 +84,7 @@ function RegisterPage() {
               name="password"
               placeholder={t("register.repeat-password")}
               value={repeatPassword}
-              onChange={() => setRepeatPassword()}
+              onChange={(e) => setRepeatPassword(e.target.value)}
               required
             />
           </div>

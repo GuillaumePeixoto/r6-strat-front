@@ -1,9 +1,15 @@
 import { useState } from "react";
-import "./../assets/styles/login.compenent.css";
+import "./../assets/styles/login.component.css";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
+import { useContext } from 'react';
+import { AuthContext } from './../context/auth.context';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { t } = useTranslation();
+  const { setIsLoggedIn, setLoggedUserId } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
     username: "",
@@ -22,19 +28,20 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5005/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, 
+        {username: credentials.username, password: credentials.password},
+      );
 
-      const data = await response.json();
+      console.log(response);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Erreur de connexion");
+      if (response.status != 200) {
+        setError(response.data.message || "Erreur de connexion")
       }
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", response.data.token);
+      setLoggedUserId(response.data.payload._id);
+      setIsLoggedIn(true);
+      navigate("/");
       // redirection à ajouter ici selon ton système de routing
     } catch (err) {
       setError(err.message);
