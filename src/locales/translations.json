@@ -1,0 +1,36 @@
+{
+  "fr": {
+    "login": {
+      "title-button": "SE CONNECTER",
+      "username-placeholder": "Entrer votre nom d'utilisateur"
+    },
+    "register": {
+      "title-part1": "CREER UN",
+      "title-part2": "COMPTE",
+      "title-button": "S'INSCRIRE",
+      "username-placeholder": "Entrer un nom d'utilisateur",
+      "password-placeholder": "Entrer un mot de passe",
+      "repeat-password": "Répeter le mot de passe"
+    },
+    "username": "Utilisateur",
+    "password": "Mot de passe",
+    "loading": "Chargement..."
+  },
+  "en": {
+    "login": {
+      "title-button": "LOG IN",
+      "username-placeholder": "Enter your username"
+    },
+    "register": {
+      "title-part1": "CREATE AN",
+      "title-part2": "ACCOUNT",
+      "title-button": "REGISTER",
+      "username-placeholder": "Enter an username",
+      "password-placeholder": "Enter a password",
+      "repeat-password": "Repeat the password"
+    },
+    "username": "Username",
+    "password": "Password",
+    "loading": "Loading..."
+  }
+}

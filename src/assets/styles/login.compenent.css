@@ -1,0 +1,61 @@
+.login-page {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f1012;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.login-card {
+    background: #1a1c1f;
+    padding: 2rem;
+    border-radius: 4px;
+    border-top: 4px solid #db9e15;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+.gold { color: #db9e15; }
+.field { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
+label { margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; }
+input {
+    padding: 0.8rem;
+    background: #2a2d32;
+    border: 1px solid #3f434a;
+    color: white;
+    outline: none;
+}
+input:focus { border-color: #db9e15; }
+button {
+    width: 100%;
+    padding: 1rem;
+    background: #db9e15;
+    border: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover { background: #f0ad1a; }
+button:disabled { background: #555; cursor: not-allowed; }
+.error-msg { color: #ff4d4d; font-size: 0.85rem; margin-bottom: 1rem; }
+
+
+.nav-link {
+  color: #666;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
+}
+
+/* Style appliqué automatiquement par NavLink sur la page active */
+.nav-link.active {
+  color: var(--main-yellow);
+  background-color: #555555;
+  font-weight: bold;
+  border-bottom: 3px solid var(--main-yellow);
+}

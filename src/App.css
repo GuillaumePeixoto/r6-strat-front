@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+    --main-bg-color: #0b0e11;
+    --second-bg-color: #242629;
+    --main-yellow: #f0ad1a;
+}
+
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background-color: var(--main-bg-color)
+}
+
+.min-screen-height{
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column
+}
+
+.main-bg-color{
+    background-color: var(--main-bg-color);
+}
+
+.second-bg-color{
+    background-color: var(--second-bg-color);
+}
+
+/* Partie strategie ajout/modif */
+
+.sidebar{
+    width: 30%;
+}
+
+.mapside{
+    width: 70%;
+}
+
+.agent-card{
+    background-color: #20385b;
+    padding: 8px 20px;
+}
+
+.btn-spawn img{
+    height: 22px;
+}
+
+.agent-mini-icon{
+    width: 50px;
+}
+
+.marker-bg-circle {
+    /* Formule pour que la taille diminue doucement au dézoom */
+    /* À zoom 18 (max), ça fait ~36px. À zoom 15, ça fait ~24px. */
+    width: calc(25px + (var(--map-zoom) * 2px));
+    height: calc(25px + (var(--map-zoom) * 2px));
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+img.gadget-img, img.utility-img {
+    width: 80% !important;
+    height: 80% !important;
+    object-fit: contain;
+}
+
+.marker-wall-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: calc(18px + (var(--map-zoom) * 14px));
+    height: calc(18px + (var(--map-zoom) * 14px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wall-img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    /* On ne met pas de filter: brightness(0) si l'icône originale est déjà explicite */
+}
+
+.mini-icon{
+    width: 50px;
+}
+
+.leaflet-popup-content{
+    margin: 4px;
+}
