@@ -21,7 +21,6 @@ function HomePage() {
           return;
         }
 
-        console.log(response.data);
         setMaps(response.data);
         setError(null);
       } catch (error) {
@@ -62,7 +61,7 @@ function HomePage() {
 
               <div className="map-footer">
                 <div className="map-stats">
-                  <span className="count">{map.strategiesCount ?? 0}</span>
+                  <span className="strat-counter">{map.strategiesCount ?? 0}</span>
                   <span className="label">
                     STRAT{map.strategiesCount > 1 ? "S" : ""}
                   </span>

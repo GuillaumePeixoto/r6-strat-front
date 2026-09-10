@@ -33,8 +33,6 @@ function Login() {
         { username: credentials.username, password: credentials.password },
       );
 
-      console.log(response);
-
       if (response.status != 200) {
         setError(response.data.message || "Erreur de connexion");
       }

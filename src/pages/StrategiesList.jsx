@@ -15,8 +15,6 @@ function StrategiesList() {
     const loadStrategies = useCallback(async (mapId, currentFilters) => {
         setIsLoading(true);
 
-        console.log(mapId, currentFilters);
-
         try {
             const response = await api.get(`/api/strategies`, {
                 params: {
@@ -27,8 +25,6 @@ function StrategiesList() {
                     map: mapId
                 },
             });
-
-            console.log("/api/strategie", response);
 
             setStrategies(response.data);
         } catch (requestError) {
@@ -46,8 +42,6 @@ function StrategiesList() {
                     api.get(`/api/maps/${slugMap}`, { params: { include: "bombSites" } }),
                     api.get("/api/agents"),
                 ]);
-
-                console.log('mapResponse',mapResponse);
 
                 setMap(mapResponse.data);
                 setAgents(agentsResponse.data);
