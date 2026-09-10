@@ -92,6 +92,7 @@ img.gadget-img, img.utility-img {
     width: 50px;
 }
 
-.leaflet-popup-content{
-    margin: 4px;
+.leaflet-popup-content-wrapper .leaflet-popup-content{
+    margin: 4px 3px;
+    width: 100%;
 }

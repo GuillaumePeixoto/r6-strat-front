@@ -245,7 +245,7 @@ function StrategyMapPage() {
         ),
       );
     };
-    marker.bindPopup(popupContent, { minWidth: 20, closeButton: false });
+    marker.bindPopup(popupContent, { className: "w-10 m-0", minWidth: 30, maxWidth: 30, closeButton: false });
 
     mapMarkersRef.current[instanceId].utilityMarkers.push({
       id_bdd: targetUtil._id,
