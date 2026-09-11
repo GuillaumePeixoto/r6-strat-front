@@ -15,7 +15,6 @@ function MapDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const toggleFavorite = async (strat) => {
-    console.log('strat', strat);
     try{
         const response = await api.patch(`/api/favorites/${strat.id}`);
         return response.data.isFavorite;
@@ -28,7 +27,6 @@ function MapDetailPage() {
     try {
       const response = await api.get(`/api/maps/${slug}`, { params: { include: "bombSites" }});
       setMap(response.data);
-      console.log("mapdata",response.data);
       return response.data;
     } catch (error) {
       console.error("Erreur lors du chargement de la map", error);
@@ -75,10 +73,8 @@ function MapDetailPage() {
   useEffect(() => {
     const init = async () => {
       const mapData = await fetchMapDetails();
-      console.log('map',(mapData));
       await fetchAgentsList();
       if (mapData?._id) {
-        console.log('on est rentrer');
         await fetchStrategies({id_map: mapData._id});
       }
     };

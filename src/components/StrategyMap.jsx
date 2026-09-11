@@ -23,7 +23,10 @@ function StrategyMap({ mapDetails, strategy }) {
 
     const height = 900;
     const width = 1600 * (mapDetails.floorCount || 1);
-    const bounds = [[0, 0], [height, width]];
+    const bounds = [
+      [0, 0],
+      [height, width],
+    ];
 
     L.imageOverlay(mapDetails.imagePath, bounds).addTo(map);
     map.fitBounds(bounds);
@@ -32,9 +35,10 @@ function StrategyMap({ mapDetails, strategy }) {
     const details = strategy.infosStrategy || strategy.detail_strategy || {};
     const agents = details.agents || [];
     const availableAgents = mapDetails.agents || [];
-    const findAgent = (id) => availableAgents.find(
-      (agent) => String(agent._id || agent.id) === String(id),
-    );
+    const findAgent = (id) =>
+      availableAgents.find(
+        (agent) => String(agent._id || agent.id) === String(id),
+      );
 
     const wallIcon = L.divIcon({
       className: "r6-marker-container wall-marker",
@@ -85,12 +89,19 @@ function StrategyMap({ mapDetails, strategy }) {
 
       const addEquipment = (items, type) => {
         (items || []).forEach((item) => {
-          const equipment = type === "gadget"
-            ? (agent.agentObject || []).find((entry) => String(entry._id) === String(item.id_bdd))
-            : (agent.utilities || []).find((entry) => String(entry._id) === String(item.id_bdd));
+          const equipment =
+            type === "gadget"
+              ? (agent.agentObject || []).find(
+                  (entry) => String(entry._id) === String(item.id_bdd),
+                )
+              : (agent.utilities || []).find(
+                  (entry) => String(entry._id) === String(item.id_bdd),
+                );
+
           if (!equipment) return;
 
-          const iconPath = type === "gadget" ? equipment.iconObject : equipment.iconUtility;
+          const iconPath =
+            type === "gadget" ? equipment.iconObject : equipment.iconUtility;
           const icon = L.divIcon({
             className: "custom-leaflet-marker",
             html: `<div class="marker-bg-circle ${type === "gadget" ? "bg-black" : "bg-white"}" style="border:2px solid ${color}"><img src="${iconPath}" class="${type === "gadget" ? "gadget-img" : "utility-img"}" alt="" /></div>`,
@@ -117,7 +128,12 @@ function StrategyMap({ mapDetails, strategy }) {
     };
   }, [mapDetails, strategy]);
 
-  return <div ref={containerRef} className="h-175 w-full border-2 border-[#db9e15]" />;
+  return (
+    <div
+      ref={containerRef}
+      className="h-175 w-full border-2 border-[#db9e15]"
+    />
+  );
 }
 
 export default StrategyMap;

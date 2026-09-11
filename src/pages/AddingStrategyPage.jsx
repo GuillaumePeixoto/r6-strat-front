@@ -178,10 +178,10 @@ function StrategyMapPage() {
   };
 
   const addUtilityToMap = (instanceId, utility, position = null) => {
+
     const agent = activeAgents.find((a) => a.instanceId === instanceId);
     if (!agent) return;
-
-    const targetUtil = agent.currentUtilities.find((u) => u.id === utility.id);
+    const targetUtil = agent.currentUtilities.find((u) => u._id === utility._id);
     const otherUtilsWithMarkers = agent.currentUtilities.filter(
       (u) => u._id !== utility._id && u.placedCount > 0,
     );
