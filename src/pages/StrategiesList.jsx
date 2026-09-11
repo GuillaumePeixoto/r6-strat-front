@@ -1,209 +1,181 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import api from "../services/api";
-import "../assets/styles/strategies-list.component.css";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "./../services/api";
+import StrategyFilters from "./../components/StrategyFilters";
+import StrategyCard from "../components/StrategyCard";
+import styles from "./../assets/styles/map-details.module.css";
 
-function StrategiesList() {
-  const { slugMap } = useParams();
+function MapDetailPage() {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+
   const [map, setMap] = useState(null);
-  const [agents, setAgents] = useState([]);
   const [strategies, setStrategies] = useState([]);
-  const [filters, setFilters] = useState({
-    search: "",
-    site: "",
-    agents: [],
-    favorites: false,
-  });
+  const [agentsList, setAgentsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  const loadStrategies = useCallback(async (mapId, currentFilters) => {
+  const toggleFavorite = async (strat) => {
+    console.log('strat', strat);
+    try{
+        const response = await api.patch(`/api/favorites/${strat.id}`);
+        return response.data.isFavorite;
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  const fetchMapDetails = async () => {
+    try {
+      const response = await api.get(`/api/maps/${slug}`, { params: { include: "bombSites" }});
+      setMap(response.data);
+      console.log("mapdata",response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors du chargement de la map", error);
+      return null;
+    }
+  };
+
+  const fetchAgentsList = async () => {
+    try {
+      const response = await api.get("/api/agents");
+      setAgentsList(response.data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des agents:", error);
+    }
+  };
+
+  const fetchStrategies = async (filterData = {}) => {
+    if (!map && !filterData.id_map) return;
     setIsLoading(true);
 
     try {
-      const response = await api.get(`/api/strategies`, {
+      const response = await api.get("/api/strategies", {
         params: {
-          search: currentFilters.search,
-          site: currentFilters.site,
-          agents: currentFilters.agents.join(","),
-          favorites: currentFilters.favorites ? 1 : 0,
-          map: mapId,
+          map: map?._id ?? filterData.id_map,
+          search: filterData.q || "",
+          site: filterData.site || "",
+          agents: filterData.agents || [],
+          favorites: filterData.favorite ? 1 : 0,
         },
       });
 
       setStrategies(response.data);
-    } catch (requestError) {
-      console.error("Erreur lors du chargement des stratégies", requestError);
-      setError(
-        requestError.response?.data?.errorMessage ||
-          "Impossible de charger les stratégies.",
-      );
+    } catch (error) {
+      console.error("Erreur tactique lors de la récupération :", error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
+
+  const goToDetails = (id) => {
+    navigate(`/strategies/${id}`);
+  };
 
   useEffect(() => {
-    const loadPage = async () => {
-      try {
-        const [mapResponse, agentsResponse] = await Promise.all([
-          api.get(`/api/maps/${slugMap}`, { params: { include: "bombSites" } }),
-          api.get("/api/agents"),
-        ]);
-
-        setMap(mapResponse.data);
-
-        setAgents(agentsResponse.data);
-
-        await loadStrategies(mapResponse.data._id, {
-          search: "",
-          site: "",
-          agents: [],
-          favorites: false,
-        });
-      } catch (requestError) {
-        console.error("Erreur lors du chargement de la map", requestError);
-        setError(
-          requestError.response?.data?.errorMessage ||
-            "Impossible de charger la carte.",
-        );
-        setIsLoading(false);
+    const init = async () => {
+      const mapData = await fetchMapDetails();
+      console.log('map',(mapData));
+      await fetchAgentsList();
+      if (mapData?._id) {
+        console.log('on est rentrer');
+        await fetchStrategies({id_map: mapData._id});
       }
     };
 
-    loadPage();
-  }, [loadStrategies, slugMap]);
+    init();
+  }, [slug]);
 
-  const updateFilter = (name, value) => {
-    const nextFilters = { ...filters, [name]: value };
-    setFilters(nextFilters);
-    if (map) loadStrategies(map._id, nextFilters);
+  const handleFavoriteToggle = async (strat) => {
+    const isFavorite = await toggleFavorite(strat);
+
+    setStrategies((prev) =>
+      prev.map((s) =>
+        s.id === strat.id ? { ...s, is_favorite_for_me: isFavorite } : s
+      )
+    );
   };
 
-  const toggleFavorite = async (strategy) => {
-    await api.post(`/api/strategies/${strategy._id}/favorite`);
-    const nextFilters = { ...filters };
-    await loadStrategies(map._id, nextFilters);
-  };
-
-  if (error && !map)
-    return (
-      <main className="strategies-page">
-        <p>{error}</p>
-      </main>
-    );
-  if (!map)
-    return (
-      <main className="strategies-page">
-        <p>Chargement...</p>
-      </main>
-    );
+  if (!map) return null;
 
   return (
-    <main className="strategies-page">
-      <section
-        className="strategy-hero"
-        style={{ backgroundImage: `url(${map.imagePath})` }}
+    <div className="map-detail home-container flex-1 second-bg-color">
+      <div
+        className={styles.heroBanner}
+        style={{ backgroundImage: `url(${map.thumbnail})` }}
       >
-        <div className="strategy-hero-overlay">
+        <div className={styles.heroOverlay}>
           <h1>{map.name}</h1>
-          <Link to={`/map/${map.slug}/add`} className="create-strategy">
-            + Créer une stratégie
-          </Link>
-        </div>
-      </section>
-      <section className="strategy-content">
-        <h2>Stratégies de la communauté</h2>
-        <div className="strategy-filters">
-          <input
-            type="search"
-            placeholder="Rechercher..."
-            value={filters.search}
-            onChange={(event) => updateFilter("search", event.target.value)}
-          />
-          <select
-            value={filters.site}
-            onChange={(event) => updateFilter("site", event.target.value)}
+          <button
+            onClick={() => navigate(`/map/${map.slug}/add`)}
+            className={styles.btnCreate}
           >
-            <option value="">Tous les sites</option>
-            {map.bombMapLocations?.map((site) => (
-              <option key={site._id} value={site.zoneName}>
-                {site.zoneName}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.agents[0] || ""}
-            onChange={(event) =>
-              updateFilter(
-                "agents",
-                event.target.value ? [event.target.value] : [],
-              )
-            }
-          >
-            <option value="">Tous les agents</option>
-            {agents.map((agent) => (
-              <option key={agent._id} value={agent._id}>
-                {agent.name}
-              </option>
-            ))}
-          </select>
-          <label>
-            <input
-              type="checkbox"
-              checked={filters.favorites}
-              onChange={(event) =>
-                updateFilter("favorites", event.target.checked)
-              }
-            />{" "}
-            Favoris
-          </label>
+            + CRÉER UNE NOUVELLE STRATÉGIE
+          </button>
         </div>
-        {error && <p>{error}</p>}
-        {isLoading ? (
-          <div className="strategy-grid">
-            {Array.from({ length: 6 }, (_, index) => (
-              <div className="strategy-card skeleton" key={index} />
-            ))}
+      </div>
+
+      <section className="p-8">
+        <h2 className="text-[#db9e15] text-xl mb-6">
+          Stratégies de la communauté
+        </h2>
+
+        {map.strategiesCount === 0 ? (
+          <div className="text-white">
+            Aucune stratégie pour le moment. Soyez le premier à en créer une !
           </div>
         ) : (
-          <div className="strategy-grid">
-            {strategies.map((strategy) => (
-              <article className="strategy-card" key={strategy._id}>
-                <button
-                  className="favorite-button"
-                  onClick={() => toggleFavorite(strategy)}
-                  aria-label="Ajouter ou retirer des favoris"
-                >
-                  {strategy.isFavorite ? "★" : "☆"}
-                </button>
-                <h3 className="hover:text-(--main-yellow)"><Link to={`/strategies/${strategy._id}`}>{strategy.title}</Link></h3>
-                <p>
-                  {strategy.bombSiteLocation?.zoneName || "Site non renseigné"}
-                </p>
-                <div className="agent-list mt-2">
-                  {strategy.infosStrategy.agents.map((agent) => {
-                    const agentStrategy = agents.find(
-                      (a) => (a._id == agent.id_agent),
-                    );
+          <div>
+            <div>
+              <StrategyFilters
+                availableSites={map.bombMapLocations}
+                allAgents={agentsList}
+                onFilterChange={fetchStrategies}
+              />
+            </div>
 
-                    return (
-                      <img
-                        className="w-14"
-                        src={agentStrategy.iconAgent}
-                        alt={agentStrategy.name}
-                      />
-                    );
-                  })}
-                </div>
-              </article>
-            ))}
-            {!strategies.length && <p>Aucune stratégie trouvée.</p>}
+            {isLoading ? (
+              <div className="grid grid-cols-[repeat(1,1fr)] md:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] [@media(min-width:1400px)]:grid-cols-[repeat(4,1fr)] [@media(min-width:1700px)]:grid-cols-[repeat(5,1fr)] gap-5 p-3">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-[#111] border border-[#222] h-70 rounded animate-pulse"
+                  >
+                    <div className="h-40 bg-[#1a1a1a] mb-4"></div>
+                    <div className="h-4 bg-[#1a1a1a] w-3/4 ml-4 mb-2"></div>
+                    <div className="h-4 bg-[#1a1a1a] w-1/2 ml-4"></div>
+                    <div className="flex row gap-3 px-4">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <div
+                          key={j}
+                          className="h-10 bg-[#1a1a1a] w-1/6 mt-2 mb-1"
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-[repeat(1,1fr)] md:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] [@media(min-width:1400px)]:grid-cols-[repeat(4,1fr)] [@media(min-width:1700px)]:grid-cols-[repeat(5,1fr)] gap-5 p-3">
+                {strategies.map((strat) => (
+                  <StrategyCard
+                    key={strat.id}
+                    strat={strat}
+                    canEdit={false}
+                    onClick={() => goToDetails(strat.id)}
+                    onToggleFavorite={() => handleFavoriteToggle(strat)}
+                  />
+                ))}
+                {strategies.length === 0 && (
+                  <div className="text-white">Aucune stratégie trouvée.</div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </section>
-    </main>
+    </div>
   );
 }
 
-export default StrategiesList;
+export default MapDetailPage;

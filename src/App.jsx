@@ -18,12 +18,12 @@ function App() {
   return (
     <>
       <NavBar />
-      <div className="min-screen-height">
+      <div className="min-screen-height second-bg-color">
         <Routes>
           <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<RegisterPage></RegisterPage>} />
-          <Route path="/map/:slugMap" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
+          <Route path="/map/:slug" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
           <Route path="/strategies/:id" element={<ProtectedRoute><DetailsStrategyPage /></ProtectedRoute>} />
           <Route path="/map/:slug/add" element={<ProtectedRoute> <AddingStrategyPage /> </ProtectedRoute>}></Route> 
           <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />

@@ -1,18 +1,16 @@
-.home-container {
+.homeContainer {
     padding: 40px;
     color: white;
 }
 
-.gold { color: #db9e15; }
-
-.maps-grid {
+.mapsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
     margin-top: 30px;
 }
 
-.map-card {
+.mapCard {
     height: 180px;
     background-size: cover;
     background-position: center;
@@ -22,19 +20,19 @@
     border-radius: 4px 4px 0 0;
 }
 
-.map-card-wrapper {
+.mapCardWrapper {
     transition: transform 0.5s ease;
 }
 
-.map-card-wrapper:hover .map-card {
+.mapCardWrapper:hover .mapCard {
     border-color: #db9e15;
 }
 
-.map-card-wrapper:hover {
+.mapCardWrapper:hover {
     transform: scale(1.05);
 }
 
-.map-overlay {
+.mapOverlay {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -43,14 +41,14 @@
     padding: 20px 15px 10px;
 }
 
-.map-title {
+.mapTitle {
     margin: 0;
     font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
-.map-footer {
+.mapFooter {
     background: #16191c;
     padding: 15px;
     display: flex;
@@ -61,12 +59,12 @@
     border-radius: 0 0 4px 4px;
 }
 
-.map-stats {
+.mapStats {
     display: flex;
     flex-direction: column;
 }
 
-.strat-counter {
+.stratCounter {
     font-size: 1.2rem;
     font-weight: bold;
     color: #db9e15;
@@ -77,7 +75,7 @@
     color: #888;
 }
 
-.btn-select {
+.btnSelect {
     background: transparent;
     border: 1px solid #db9e15;
     color: #db9e15;
@@ -88,7 +86,7 @@
     transition: 0.3s;
 }
 
-.btn-select:hover {
+.btnSelect:hover {
     background: #db9e15;
     color: black;
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./../assets/styles/home.component.css";
+import styles from "./../assets/styles/home.module.css";
 import api from '../services/api';
 import { useTranslation } from "react-i18next";
 
@@ -34,8 +34,8 @@ function HomePage() {
   }, []);
 
   return (
-    <div className={`home-container main-bg-color flex-1`}>
-      <div className="home-header">
+    <div className={`${styles.homeContainer} flex-1`}>
+      <div>
         <h1>
           SÉLECTIONNEZ UNE <span className="gold">CARTE</span>
         </h1>
@@ -47,26 +47,26 @@ function HomePage() {
       {isLoading ? (
         <div className="loader">Chargement du contenu...</div>
       ) : (
-        <div className="maps-grid">
+        <div className={ styles.mapsGrid }>
           {maps.map((map) => (
-            <div key={map._id} className="map-card-wrapper">
+            <div key={map._id} className={ styles.mapCardWrapper }>
               <div
-                className="map-card"
+                className={ styles.mapCard }
                 style={{ backgroundImage: `url(${map.thumbnail})` }}
               >
-                <div className="map-overlay">
-                  <h2 className="map-title">{map.name}</h2>
+                <div className={ styles.mapOverlay }>
+                  <h2 className={ styles.mapTitle }>{map.name}</h2>
                 </div>
               </div>
 
-              <div className="map-footer">
-                <div className="map-stats">
-                  <span className="strat-counter">{map.strategiesCount ?? 0}</span>
-                  <span className="label">
+              <div className={ styles.mapFooter }>
+                <div className={ styles.mapStats }>
+                  <span className={ styles.stratCounter }>{map.strategiesCount ?? 0}</span>
+                  <span className={ styles.label }>
                     STRAT{map.strategiesCount > 1 ? "S" : ""}
                   </span>
                 </div>
-                <Link to={`/map/${map.slug}`} className="btn-select">
+                <Link to={`/map/${map.slug}`} className={ styles.btnSelect }>
                   Voir
                 </Link>
               </div>

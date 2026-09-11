@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./../assets/styles/login.component.css";
+import styles from "./../assets/styles/login.module.css";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { useContext } from "react";
@@ -60,14 +60,14 @@ function Login() {
   }
 
   return (
-    <div className="login-page">
-      <div className="login-card">
+    <div className={styles.loginPage}>
+      <div className={styles.loginCard}>
         <h1>
           R6 STRAT <span className="gold">MAKER</span>
         </h1>
 
         <form onSubmit={handleLogin}>
-          <div className="field">
+          <div className={styles.field}>
             <label>{t("username")}</label>
             <input
               type="text"
@@ -79,7 +79,7 @@ function Login() {
             />
           </div>
 
-          <div className="field">
+          <div className={styles.field}>
             <label>{t("password")}</label>
             <input
               type="password"
@@ -93,7 +93,7 @@ function Login() {
 
           {error && <p className="error-msg">{error}</p>}
 
-          <button type="submit" className="button-connexion" disabled={isLoading}>
+          <button type="submit" className={styles.buttonConnexion} disabled={isLoading}>
             {isLoading ? t("loading") : t("login.title-button")}
           </button>
         </form>
