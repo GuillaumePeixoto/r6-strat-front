@@ -10,6 +10,7 @@ import StrategiesList from './pages/StrategiesList';
 import RegisterPage from "./pages/RegisterPage";
 import AddingStrategyPage from "./pages/AddingStrategyPage";
 import DetailsStrategyPage from "./pages/DetailsStrategyPage";
+import Profil from "./pages/ProfilPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/map/:slug" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
           <Route path="/strategies/:id" element={<ProtectedRoute><DetailsStrategyPage /></ProtectedRoute>} />
           <Route path="/map/:slug/add" element={<ProtectedRoute> <AddingStrategyPage /> </ProtectedRoute>}></Route> 
+          <Route path="/profile" element={<ProtectedRoute> <Profil /> </ProtectedRoute>}></Route> 
           <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
         </Routes>
       </div>

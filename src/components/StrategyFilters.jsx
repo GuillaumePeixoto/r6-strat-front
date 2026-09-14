@@ -59,8 +59,6 @@ function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }
     onFilterChange(payload);
   };
 
-  console.log(availableSites);
-
   return (
     <div className="flex flex-col lg:flex-row gap-4 bg-[#0f0f0f] p-4 border border-[#2a2a2a] rounded shadow-2xl items-end">
       <div className="flex-1 w-full">

@@ -2,7 +2,7 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
   return (
     <div
       onClick={() => onClick(strat)}
-      className="bg-[#1a1a1a] border border-gray-800 hover:border-[#db9e15] transition-all group cursor-pointer overflow-hidden rounded shadow-lg"
+      className="bg-[#1a1a1a] border border-gray-800 hover:border-[#db9e15] transition-all group cursor-pointer overflow-hidden rounded shadow-lg h-full"
     >
       <div className="h-40 bg-gray-900 relative">
         <img
@@ -70,7 +70,7 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
         <div className="flex justify-between items-center text-[10px] text-gray-500 uppercase font-mono">
           <span className="text-[#db9e15] text-xs">{strat.bombsite_name}</span>
         </div>
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-row gap-1 flex-wrap">
           {strat.agents.map((agent) => (
             <img key={agent.name} src={agent.icon} title={agent.name} className="mini-icon" alt={agent.name} />
           ))}
