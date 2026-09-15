@@ -1,11 +1,13 @@
 import AgentCard from './AgentCard';
+import { useTranslation } from 'react-i18next';
 
 function Sidebar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
+  const { t } = useTranslation();
   return (
     <div className="sidebar pe-4 h-full overflow-y-auto">
       <div id="active-agents-list" className="agent-list">
         <h2 className="font-bold text-[#db9e15] mb-3 uppercase text-sm tracking-wider">
-          Liste des agents dans l'équipe
+          {t('editor.chooseAgent')}
         </h2>
       </div>
 
@@ -25,7 +27,7 @@ function Sidebar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
         </div>
       ) : (
         <div className="text-gray-500 italic text-sm text-center mt-10">
-          Aucun agent sélectionné...
+          {t('editor.noActiveAgents')}
         </div>
       )}
     </div>

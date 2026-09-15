@@ -37,15 +37,15 @@ function HomePage() {
     <div className={`${styles.homeContainer} flex-1`}>
       <div>
         <h1>
-          SÉLECTIONNEZ UNE <span className="gold">CARTE</span>
+          {t('home.selectMap')} <span className="gold">{t('home.map')}</span>
         </h1>
-        <p>{maps.length} cartes disponibles pour vos stratégies</p>
+        <p>{t('home.availableMaps', { count: maps.length })}</p>
       </div>
 
       {error && <h4>{error}</h4>}
 
       {isLoading ? (
-        <div className="loader">Chargement du contenu...</div>
+        <div className="loader">{t('home.loading')}</div>
       ) : (
         <div className={ styles.mapsGrid }>
           {maps.map((map) => (
@@ -55,7 +55,7 @@ function HomePage() {
                 style={{ backgroundImage: `url(${map.thumbnail})` }}
               >
                 <div className={ styles.mapOverlay }>
-                  <h2 className={ styles.mapTitle }>{map.name}</h2>
+                  <h2 className={ styles.mapTitle }>{t(`map-name.${map.slug}`, { defaultValue: map.name })}</h2>
                 </div>
               </div>
 
@@ -63,11 +63,11 @@ function HomePage() {
                 <div className={ styles.mapStats }>
                   <span className={ styles.stratCounter }>{map.strategiesCount ?? 0}</span>
                   <span className={ styles.label }>
-                    STRAT{map.strategiesCount > 1 ? "S" : ""}
+                    {t('home.strategies')}{map.strategiesCount > 1 ? "S" : ""}
                   </span>
                 </div>
                 <Link to={`/map/${map.slug}`} className={ styles.btnSelect }>
-                  Voir
+                  {t('home.view')}
                 </Link>
               </div>
             </div>

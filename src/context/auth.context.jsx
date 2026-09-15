@@ -56,7 +56,7 @@ function AuthWrapper({ children }) {
     isLoadingContext,
     loggedUserProfilImage,
     setLoggedUserProfilImage,
-    verifyUser,
+    verifyUser
   };
 
   return (

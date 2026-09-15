@@ -24,13 +24,13 @@ function RegisterPage() {
     setError("");
     setIsLoading(true);
     if (!username || !password || !repeatPassword) {
-      setError("You need to complete the form.");
+      setError(t('register.form-required'));
       setIsLoading(false);
       return;
     }
 
     if (password != repeatPassword) {
-      setError("");
+      setError(t('register.password-mismatch'));
       setIsLoading(false);
       return;
     }
@@ -42,7 +42,7 @@ function RegisterPage() {
       });
       navigate("/login");
     } catch (err) {
-      setError("Une erreur s'est produite : " + err.message);
+      setError(t('register.error', { message: err.message }));
       setIsLoading(false);
     }
   };

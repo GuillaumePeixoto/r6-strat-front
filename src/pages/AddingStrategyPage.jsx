@@ -8,12 +8,14 @@ import api from "../services/api";
 import AgentSelector from "../components/AgentSelector";
 import StrategyControl from "../components/StrategyControl";
 import Sidebar from "../components/Sidebar";
+import { useTranslation } from "react-i18next";
 
 const MAX_REINFORCEMENTS = 10;
 
 function StrategyMapPage() {
   const { slug, id: editIdParam } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const duplicateId = searchParams.get("duplicate");
 
@@ -55,7 +57,7 @@ function StrategyMapPage() {
 
   const spawnWallElement = (position = null) => {
     if (!canAddReinforcement) {
-      alert("Limite de 10 renforcements atteinte !");
+      alert(t("editor.maxReinforcements"));
       return;
     }
 
@@ -117,12 +119,12 @@ function StrategyMapPage() {
 
     const alreadyExists = activeAgents.some((a) => a.id === agentData.id);
     if (alreadyExists) {
-      alert(`${agentData.name} est déjà sur la carte !`);
+      alert(t("editor.agentAlreadySelected", { name: agentData.name }));
       return;
     }
 
     if (activeAgents.length >= 5) {
-      alert("Action impossible : Une escouade ne peut pas dépasser 5 agents.");
+      alert(t("editor.maxAgents"));
       return;
     }
 
@@ -200,7 +202,7 @@ function StrategyMapPage() {
     }
 
     if (targetUtil.placedCount >= utility.maxUse) {
-      alert("Limite atteinte !");
+      alert(t("editor.limitReached"));
       return;
     }
 

@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onToggleFavorite }) {
+  const { t } = useTranslation();
   return (
     <div
       onClick={() => onClick(strat)}
@@ -8,11 +11,11 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
         <img
           src={`${strat.map_thumbnail}`}
           className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-          alt={strat.map_name}
+          alt={t(`map-name.${strat.map_slug}`, { defaultValue: strat.map_name })}
         />
 
         <div className="absolute bottom-2 left-2 bg-[#db9e15] text-black text-[10px] font-bold px-2 py-1 uppercase">
-          {strat.map_name}
+          {t(`map-name.${strat.map_slug}`, { defaultValue: strat.map_name })}
         </div>
 
         {canEdit && (
@@ -23,7 +26,7 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
                 onEdit(strat);
               }}
               className="bg-[#db9e15]/80 hover:bg-[#db9e15] text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100 shadow-xl"
-              title="Modifier"
+              title={t("strategy.edit")}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -36,7 +39,7 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
                 onDelete(strat.id);
               }}
               className="bg-red-600/80 hover:bg-red-700 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100 shadow-xl"
-              title="Supprimer"
+              title={t("strategy.delete")}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -53,7 +56,7 @@ function StrategyCard({ strat, canEdit = false, onClick, onEdit, onDelete, onTog
           className={`absolute bottom-2 right-2 p-2 rounded-full transition-all duration-300 shadow-xl cursor-pointer ${
             strat.is_favorite_for_me ? 'bg-yellow-500 text-black' : 'bg-black/50 text-white'
           }`}
-          title={strat.is_favorite_for_me ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+          title={strat.is_favorite_for_me ? t("common.removeFavorite") : t("common.addFavorite")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
             <path

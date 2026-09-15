@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Select, { components } from 'react-select';
+import { useTranslation } from 'react-i18next';
 
 const MAX_AGENTS = 5;
 
@@ -44,6 +45,7 @@ const customStyles = {
 };
 
 function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }) {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState({
     q: '',
     agents: [],
@@ -62,18 +64,18 @@ function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }
   return (
     <div className="flex flex-col lg:flex-row gap-4 bg-[#0f0f0f] p-4 border border-[#2a2a2a] rounded shadow-2xl items-end">
       <div className="flex-1 w-full">
-        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">Nom de la stratégie</label>
+        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">{t('filters.strategyName')}</label>
         <input
           type="text"
           value={filters.q}
           onChange={(e) => setFilters({ ...filters, q: e.target.value })}
-          placeholder="Ex: Defense Full Electric..."
+          placeholder={t('filters.strategyPlaceholder')}
           className="w-full h-13.25 bg-black border border-[#333] p-2 text-white text-sm focus:border-[#db9e15] outline-none transition rounded"
         />
       </div>
 
       <div className="flex-1 w-full custom-r6-multiselect">
-        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">Agents impliqués</label>
+        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">{t('filters.agents')}</label>
         <Select
           isMulti
           closeMenuOnSelect={false}
@@ -90,23 +92,23 @@ function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }
           noOptionsMessage={() =>
             filters.agents.length >= MAX_AGENTS ? (
               <div className="text-xs font-black uppercase text-[#db9e15] p-2 bg-black text-center">
-                Escouade complète (Maximum 5 agents)
+                {t('filters.fullSquad')}
               </div>
             ) : (
-              'Aucune option'
+              t('common.none')
             )
           }
         />
       </div>
 
       <div className="w-full lg:w-48">
-        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">Site de bombe</label>
+        <label className="text-[10px] uppercase font-black text-gray-500 mb-1 block">{t('filters.bombSite')}</label>
         <select
           value={filters.site}
           onChange={(e) => setFilters({ ...filters, site: e.target.value })}
           className="w-full h-13.25 bg-black border border-[#333] py-2 px-1 text-white text-sm rounded outline-none focus:border-[#db9e15]"
         >
-          <option value="">Tous les sites</option>
+          <option value="">{t('filters.allSites')}</option>
           {availableSites.map((site) => (
             <option key={site._id} value={site._id}>
               {site.zoneName}
@@ -122,7 +124,7 @@ function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }
         }`}
       >
         <span className="text-lg h-8">{filters.favorite ? '★' : '☆'}</span>
-        Favoris
+        {t('filters.favorites')}
       </button>
 
       <button
@@ -130,7 +132,7 @@ function StrategyFilters({ availableSites = [], allAgents = [], onFilterChange }
         className="bg-[#db9e15] hover:bg-[#b88512] h-13.25 text-black font-black uppercase px-6 py-2 rounded transition-colors flex items-center gap-2"
       >
         <span className="text-xl h-8">⌕</span>
-        RECHERCHER
+        {t('filters.search')}
       </button>
     </div>
   );

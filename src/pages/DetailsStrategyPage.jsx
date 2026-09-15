@@ -3,11 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import StrategyMap from "../components/StrategyMap";
 import { AuthContext } from "../context/auth.context";
+import { useTranslation } from "react-i18next";
 
 function DetailsStrategyPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { loggedUserId } = useContext(AuthContext);
+  const { t } = useTranslation();
   const [strategy, setStrategy] = useState(null);
   const [map, setMap] = useState(null);
   const [agents, setAgents] = useState([]);
@@ -30,7 +32,7 @@ function DetailsStrategyPage() {
           "Erreur lors du chargement de la stratégie",
           requestError,
         );
-        setError("Impossible de charger cette stratégie.");
+        setError(t('strategy.loadError'));
       }
     };
 
@@ -43,7 +45,7 @@ function DetailsStrategyPage() {
   const isCreator = strategy?.user && String(strategy.user._id) === String(loggedUserId);
 
   const handleDelete = async () => {
-    if (!window.confirm("Voulez-vous vraiment supprimer cette stratégie ?")) return;
+    if (!window.confirm(t('strategy.deleteConfirm'))) return;
 
     setIsDeleting(true);
     try {
@@ -51,7 +53,7 @@ function DetailsStrategyPage() {
       navigate(`/map/${map.slug}`);
     } catch (requestError) {
       console.error("Erreur lors de la suppression de la stratégie", requestError);
-      setError("Impossible de supprimer cette stratégie.");
+      setError(t('strategy.deleteError'));
       setIsDeleting(false);
     }
   };
@@ -67,7 +69,7 @@ function DetailsStrategyPage() {
           onClick={() => navigate(-1)}
           className="text-gray-300 hover:text-[#db9e15]"
         >
-          ← Revenir en arrière
+          ← {t('common.back')}
         </button>
         <div className="flex flex-wrap gap-3">
           <button
@@ -77,7 +79,7 @@ function DetailsStrategyPage() {
             }
             className="border border-[#db9e15] hover:bg-[#db9e15] hover:text-white px-4 py-2 text-sm font-bold text-[#db9e15]"
           >
-            📋 Dupliquer la stratégie
+            📋 {t('strategy.duplicate')}
           </button>
           {isCreator && (
             <>
@@ -86,7 +88,7 @@ function DetailsStrategyPage() {
                 onClick={() => navigate(`/map/${map.slug}/add/${strategy._id}`)}
                 className="border border-[#db9e15] px-4 py-2 text-sm font-bold text-[#db9e15] hover:bg-[#db9e15] hover:text-white"
               >
-                ✏️ Modifier la stratégie
+                ✏️ {t('strategy.edit')}
               </button>
               <button
                 type="button"
@@ -94,7 +96,7 @@ function DetailsStrategyPage() {
                 disabled={isDeleting}
                 className="border border-red-500 px-4 py-2 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isDeleting ? "Suppression..." : "🗑️ Supprimer la stratégie"}
+                {isDeleting ? t('strategy.deleting') : `🗑️ ${t('strategy.delete')}`}
               </button>
             </>
           )}
@@ -105,14 +107,14 @@ function DetailsStrategyPage() {
         <h1 className="text-2xl font-bold text-white">{strategy.title}</h1>
         {strategy.user?.username && (
           <p className="text-sm text-gray-300">
-            Créée par <span className="font-semibold text-white">{strategy.user.username}</span>
+            {t('strategy.createdBy')} <span className="font-semibold text-white">{strategy.user.username}</span>
           </p>
         )}
       </div>
       <StrategyMap mapDetails={{ ...map, agents }} strategy={strategy} />
 
       <section className="second-bg-color mt-4 p-4 text-white">
-        <p className="text-sm text-gray-300">Murs renforcés</p>
+        <p className="text-sm text-gray-300">{t('strategy.reinforcedWalls')}</p>
         <p className="text-xl font-bold">{wallCount} / 10</p>
         <div className="mt-4 flex flex-wrap gap-4">
           {strategyAgents.map((savedAgent) => {
@@ -146,7 +148,7 @@ function DetailsStrategyPage() {
                 {savedAgent.gadgets && savedAgent.gadgets.length > 0 && (
                   <div className="flex flex-col justify-center items-center stat-item">
                     <p className="stat-label text-gray-400 text-[10px]">
-                      GADGETS
+                      {t('strategy.gadgets')}
                     </p>
                     <p className="stat-value font-mono text-white">
                       {savedAgent.gadgets &&
@@ -170,7 +172,7 @@ function DetailsStrategyPage() {
                 {savedAgent.utility && savedAgent.utility.length > 0 && (
                   <div className="flex flex-col justify-center items-center stat-item">
                     <span className="stat-label text-gray-400 text-[10px]">
-                      UTILITAIRES
+                      {t('strategy.utilities')}
                     </span>
                     <span className="stat-value font-mono text-white">
                       {savedAgent.utility &&

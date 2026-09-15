@@ -13,10 +13,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./../context/auth.context";
 import MenuLogo from "./../assets/img/menu-icon.jpg";
 import ProfileLogo from "./../assets/img/profile-icon.jpg";
+import { useTranslation } from "react-i18next";
 
 function NavBar() {
-  const { isLoggedIn, isAdmin, setIsLoggedIn, loggedUserProfilImage } = useContext(AuthContext);
+  const { isLoggedIn, isAdmin, setIsLoggedIn, loggedUserProfilImage } =
+    useContext(AuthContext);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  const handleChange = (e) => {
+    i18n.changeLanguage(e.target.value);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -34,7 +41,7 @@ function NavBar() {
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="absolute -inset-0.5" />
-                  <span className="sr-only">Open main menu</span>
+                  <span className="sr-only">{t("nav.openMenu")}</span>
                   {open ? (
                     <XMarkIcon className="block size-6" aria-hidden="true" />
                   ) : (
@@ -52,14 +59,31 @@ function NavBar() {
 
               {/* Icône notifications + profil */}
               <div className="absolute h-full inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <label className="sr-only" htmlFor="language-select-desktop">
+                  Langue
+                </label>
+                <select
+                  value={i18n.language}
+                  onChange={handleChange}
+                  className="bg-[#171A20] border border-[#2A2E37] text-[13px] text-[#ECEAE4] px-2 py-1.5 outline-none focus:border-[#E8833E] cursor-pointer"
+                >
+                  <option value="fr">🇫🇷 FR</option>
+                  <option value="en">🇬🇧 EN</option>
+                </select>
                 {isLoggedIn ? (
                   <Menu as="div" className="hidden sm:block relative ml-3">
                     <div>
-                      <MenuButton className={`${!loggedUserProfilImage ? 'rounded-full' : ''} relative flex bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800`}>
-                        <span className="sr-only">Open user menu</span>
+                      <MenuButton
+                        className={`${!loggedUserProfilImage ? "rounded-full" : ""} cursor-pointer relative flex bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800`}
+                      >
+                        <span className="sr-only">{t("nav.openUserMenu")}</span>
                         <img
-                          className={`h-9 ${!loggedUserProfilImage ? 'rounded-full' : ''}`}
-                          src={loggedUserProfilImage ? loggedUserProfilImage : (ProfileLogo)}
+                          className={`h-9 ${!loggedUserProfilImage ? "rounded-full" : ""}`}
+                          src={
+                            loggedUserProfilImage
+                              ? loggedUserProfilImage
+                              : ProfileLogo
+                          }
                           alt="Profile"
                         />
                       </MenuButton>
@@ -71,7 +95,7 @@ function NavBar() {
                             to="/profile"
                             className={`${focus ? "bg-gray-100" : ""} block px-4 py-2 text-sm text-gray-700`}
                           >
-                            Profil
+                            {t("nav.profile")}
                           </NavLink>
                         )}
                       </MenuItem>
@@ -82,7 +106,7 @@ function NavBar() {
                               to="/admin/dashboard"
                               className={`${focus ? "bg-gray-100" : ""} block px-4 py-2 text-sm text-gray-700`}
                             >
-                              Admin
+                              {t("nav.admin")}
                             </NavLink>
                           )}
                         </MenuItem>
@@ -93,7 +117,7 @@ function NavBar() {
                             onClick={handleLogout}
                             className={`${focus ? "bg-gray-100" : ""} block w-full text-left px-4 py-2 text-sm text-gray-700`}
                           >
-                            Déconnexion
+                            {t("nav.logout")}
                           </button>
                         )}
                       </MenuItem>
@@ -107,7 +131,7 @@ function NavBar() {
                         `nav-link ${isActive ? "active" : ""}`
                       }
                     >
-                      Connexion
+                      {t("nav.login")}
                     </NavLink>
                     <NavLink
                       to="/register"
@@ -115,7 +139,7 @@ function NavBar() {
                         `nav-link ${isActive ? "active" : ""}`
                       }
                     >
-                      Inscription
+                      {t("nav.register")}
                     </NavLink>
                   </div>
                 )}
@@ -132,21 +156,21 @@ function NavBar() {
                     to="/profile"
                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                   >
-                    Profil
+                    {t("nav.profile")}
                   </NavLink>
                   {isAdmin && (
                     <NavLink
                       to="/admin/dashboard"
                       className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
-                      Admin
+                      {t("nav.admin")}
                     </NavLink>
                   )}
                   <button
                     onClick={handleLogout}
                     className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                   >
-                    Déconnexion
+                    {t("nav.logout")}
                   </button>
                 </>
               )}

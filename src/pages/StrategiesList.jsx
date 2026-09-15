@@ -4,10 +4,12 @@ import api from "./../services/api";
 import StrategyFilters from "./../components/StrategyFilters";
 import StrategyCard from "../components/StrategyCard";
 import styles from "./../assets/styles/map-details.module.css";
+import { useTranslation } from "react-i18next";
 
 function MapDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [map, setMap] = useState(null);
   const [strategies, setStrategies] = useState([]);
@@ -101,24 +103,24 @@ function MapDetailPage() {
         style={{ backgroundImage: `url(${map.thumbnail})` }}
       >
         <div className={styles.heroOverlay}>
-          <h1>{map.name}</h1>
+          <h1>{t(`map-name.${map.slug}`, { defaultValue: map.name })}</h1>
           <button
             onClick={() => navigate(`/map/${map.slug}/add`)}
             className={styles.btnCreate}
           >
-            + CRÉER UNE NOUVELLE STRATÉGIE
+            {t('strategy.create')}
           </button>
         </div>
       </div>
 
       <section className="p-8">
         <h2 className="text-[#db9e15] text-xl mb-6">
-          Stratégies de la communauté
+          {t('strategy.community')}
         </h2>
 
         {map.strategiesCount === 0 ? (
           <div className="text-white">
-            Aucune stratégie pour le moment. Soyez le premier à en créer une !
+            {t('strategy.empty')}
           </div>
         ) : (
           <div>
@@ -163,7 +165,7 @@ function MapDetailPage() {
                   />
                 ))}
                 {strategies.length === 0 && (
-                  <div className="text-white">Aucune stratégie trouvée.</div>
+                  <div className="text-white">{t('strategy.notFound')}</div>
                 )}
               </div>
             )}

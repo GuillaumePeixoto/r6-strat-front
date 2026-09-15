@@ -4,9 +4,11 @@ import StrategyCard from "../components/StrategyCard";
 import { Link, useNavigate } from "react-router-dom";
 import AgentSelector from "../components/AgentSelector";
 import { AuthContext } from "./../context/auth.context";
+import { useTranslation } from "react-i18next";
 
 function PasswordField({ label, value, onChange }) {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
   return (
     <label className="block">
       <span className="block text-[12px] text-[#8B909B] mb-1">{label}</span>
@@ -23,7 +25,7 @@ function PasswordField({ label, value, onChange }) {
           onClick={() => setVisible((v) => !v)}
           className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-[#5B6170] hover:text-[#ECEAE4]"
         >
-          {visible ? "Masquer" : "Afficher"}
+          {visible ? t("common.hide") : t("common.show")}
         </button>
       </div>
     </label>
@@ -31,6 +33,7 @@ function PasswordField({ label, value, onChange }) {
 }
 
 function PasswordPanel({ open, hidePanel }) {
+  const { t } = useTranslation();
   const [current, setCurrent] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -63,17 +66,17 @@ function PasswordPanel({ open, hidePanel }) {
     <div className="mt-4 border border-[#262B34] bg-[#12141A] p-4 space-y-4">
       <div className="grid sm:grid-cols-3 gap-3">
         <PasswordField
-          label="Mot de passe actuel"
+          label={t("profile.currentPassword")}
           value={current}
           onChange={(e) => setCurrent(e.target.value)}
         />
         <PasswordField
-          label="Nouveau mot de passe"
+          label={t("profile.newPassword")}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
         <PasswordField
-          label="Confirmation"
+          label={t("profile.confirmation")}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
@@ -83,17 +86,17 @@ function PasswordPanel({ open, hidePanel }) {
           onClick={() => sendUpdatePassword()}
           className="cursor-pointer bg-[#f0ad1a] hover:bg-[#bb8716] text-[#12141A] text-[13px] font-semibold px-4 py-2 transition-colors"
         >
-          Enregistrer le mot de passe
+          {t("profile.savePassword")}
         </button>
         <button
           onClick={() => hidePanel()}
-          className="bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-4 py-2 transition-colors"
+          className="cursor-pointer bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-4 py-2 transition-colors"
         >
-          Annuler
+          {t("common.cancel")}
         </button>
         {saved && (
           <span className="text-[12px] text-[#6FCF97]">
-            Mot de passe mis à jour
+            {t("profile.passwordUpdated")}
           </span>
         )}
       </div>
@@ -102,6 +105,7 @@ function PasswordPanel({ open, hidePanel }) {
 }
 
 function Profil() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [profilImage, setProfilImage] = useState("");
@@ -229,7 +233,7 @@ function Profil() {
               )
             ) : (
               <div className="h-30 w-30 shrink-0 bg-[#1D2129] border border-[#2A2E37] flex items-center justify-center">
-                <span className="text-[12px] text-[#5B6170]">Avatar</span>
+                <span className="text-[12px] text-[#5B6170]">{t("profile.avatar")}</span>
               </div>
             )}
           </div>
@@ -239,16 +243,15 @@ function Profil() {
               {username}
             </h2>
             <p className="text-[13px] text-[#8B909B] mt-0.5">
-              {ownStratsTotal} stratégies créées · {favoriteStratsTotal} en
-              favoris
+              {ownStratsTotal} {t("profile.strategiesCreated")} · {favoriteStratsTotal} {t("profile.favorites")}
             </p>
 
             <button
               onClick={() => setShowPassword((v) => !v)}
               hidden={showPassword}
-              className="mt-3 bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+              className="cursor-pointer mt-3 bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
             >
-              Changer le mot de passe
+              {t("profile.changePassword")}
             </button>
 
             <PasswordPanel open={showPassword} hidePanel={() => setShowPassword(!showPassword)} />
@@ -266,13 +269,13 @@ function Profil() {
                 onClick={() => validChangeProfilImage()}
                 className="cursor-pointer mt-3 me-3 justify-center inline-flex items-center gap-2 text-[14px] text-white hover:text-black border bg-[#db9e15] hover:bg-(--main-yellow) border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
               >
-                Valider
+                {t("common.confirm")}
               </button>
               <button
                 onClick={() => toggleChangeImage()}
                 className="cursor-pointer bg-[#0F1115] mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
               >
-                Annuler
+                {t("common.cancel")}
               </button>
             </div>
           )}
@@ -281,7 +284,7 @@ function Profil() {
             onClick={() => toggleChangeImage()}
             className="w-30 bg-[#0F1115] cursor-pointer mt-0 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
           >
-            Changer
+            {t("profile.changeImage")}
           </button>
         </div>
 
@@ -289,14 +292,14 @@ function Profil() {
         <div className="mt-10">
           <div className="flex items-baseline gap-3 mb-4">
             <h2 className="text-[15px] font-bold text-[#ECEAE4] tracking-tight">
-              Stratégie favorite
+              {t("profile.favoriteStrategies")}
             </h2>
             <span className="text-[12px] text-[#5B6170]">
-              {favoriteStratsTotal} affichées
+              {favoriteStratsTotal} {t("profile.displayed")}
             </span>
             <div className="flex-1 h-px bg-[#262B34]" />
             <Link to="#" className="hover:text-(--main-yellow)">
-              Voir plus
+              {t("common.showMore")}
             </Link>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -315,14 +318,14 @@ function Profil() {
         <div className="mt-10 mb-4">
           <div className="flex items-baseline gap-3 mb-4">
             <h2 className="text-[15px] font-bold text-[#ECEAE4] tracking-tight">
-              Mes stratégies
+              {t("profile.myStrategies")}
             </h2>
             <span className="text-[12px] text-[#5B6170]">
-              {ownStratsTotal} affichées
+              {ownStratsTotal} {t("profile.displayed")}
             </span>
             <div className="flex-1 h-px bg-[#262B34]" />
             <Link to="#" className="hover:text-(--main-yellow)">
-              Voir plus
+              {t("common.showMore")}
             </Link>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

@@ -34,7 +34,7 @@ function Login() {
       );
 
       if (response.status != 200) {
-        setError(response.data.message || "Erreur de connexion");
+        setError(response.data.message || t("login.error"));
       }
 
       localStorage.setItem("token", response.data.token);
@@ -56,8 +56,8 @@ function Login() {
     }
   }, [isLoadingContext, isLoggedIn, navigate]);
 
-  if(isLoadingContext){
-    return(<h2>Essaie une auto connexion</h2>)
+  if (isLoadingContext) {
+    return <h2>{t("login.auto-login")}</h2>;
   }
 
   return (

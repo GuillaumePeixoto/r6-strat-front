@@ -1,11 +1,14 @@
+import { useTranslation } from 'react-i18next';
+
 function AgentSelector({ allAgents, activeAgents, onSelect }) {
+  const { t } = useTranslation();
   const isAgentActive = (agentId) => {
     return activeAgents.some((agent) => agent.id === agentId);
   };
 
   return (
     <div className="agent-selector-container">
-      <h3 className="text-white uppercase text-sm tracking-widest">Choisir un Agent</h3>
+      <h3 className="text-white uppercase text-sm tracking-widest">{t('editor.chooseAgent')}</h3>
 
       <div className="grid grid-cols-[repeat(auto-fill,80px)] my-4 gap-y-4" style={{ rowGap: '15px' }}>
         {allAgents.map((agent) => (

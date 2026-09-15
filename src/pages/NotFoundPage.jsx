@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function NotFoundPage() {
   const cascadeCount = 4;
   const [visibleCount, setVisibleCount] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timers = [];
@@ -42,15 +44,15 @@ function NotFoundPage() {
           style={getStyle(index)}
         >
           <i className="bi bi-exclamation-triangle-fill text-5xl text-(--yellow) mb-3"></i>
-          <h1 className="text-2xl font-bold">Error 404</h1>
+          <h1 className="text-2xl font-bold">{t('notFound.title')}</h1>
           <p className="text-neutral-400 mt-2">
-            Looks like an invisible wall! No secret rooms or loot found here.
+            {t('notFound.message')}
           </p>
           <Link
             to="/"
             className="mt-5 text-lg cursor-pointer py-2 px-6 bg-(--yellow) rounded-md font-bold hover:bg-transparent hover:text-(--yellow) border-2 border-(--yellow) transition-colors"
           >
-            OK
+            {t('notFound.ok')}
           </Link>
         </div>
       ))}

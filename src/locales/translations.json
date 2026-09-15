@@ -2,7 +2,9 @@
   "fr": {
     "login": {
       "title-button": "SE CONNECTER",
-      "username-placeholder": "Entrer votre nom d'utilisateur"
+      "username-placeholder": "Entrer votre nom d'utilisateur",
+      "auto-login": "Tentative de reconnexion",
+      "error": "Erreur de connexion"
     },
     "register": {
       "title-part1": "CREER UN",
@@ -10,17 +12,136 @@
       "title-button": "S'INSCRIRE",
       "username-placeholder": "Entrer un nom d'utilisateur",
       "password-placeholder": "Entrer un mot de passe",
-      "repeat-password": "Répeter le mot de passe"
+      "repeat-password": "Répéter le mot de passe",
+      "form-required": "Vous devez compléter le formulaire.",
+      "password-mismatch": "Les mots de passe ne correspondent pas.",
+      "error": "Une erreur s'est produite : {{message}}"
     },
     "username": "Utilisateur",
     "password": "Mot de passe",
     "loading": "Chargement...",
-    "no-data-founded": "Aucune donnée n'a été trouvée."
+    "no-data-founded": "Aucune donnée n'a été trouvée.",
+    "common": {
+      "cancel": "Annuler",
+      "confirm": "Valider",
+      "save": "Sauvegarder",
+      "back": "Revenir en arrière",
+      "showMore": "Voir plus",
+      "search": "Rechercher",
+      "none": "Aucune option",
+      "createdBy": "Créée par",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "addFavorite": "Ajouter aux favoris",
+      "removeFavorite": "Retirer des favoris"
+    },
+    "nav": {
+      "openMenu": "Ouvrir le menu principal",
+      "openUserMenu": "Ouvrir le menu utilisateur",
+      "profile": "Profil",
+      "admin": "Admin",
+      "logout": "Déconnexion",
+      "login": "Connexion",
+      "register": "Inscription"
+    },
+    "home": {
+      "selectMap": "SÉLECTIONNEZ UNE",
+      "map": "CARTE",
+      "availableMaps": "{{count}} cartes disponibles pour vos stratégies",
+      "loading": "Chargement du contenu...",
+      "strategies": "STRAT",
+      "view": "Voir"
+    },
+    "profile": {
+      "avatar": "Avatar",
+      "strategiesCreated": "stratégies créées",
+      "favorites": "en favoris",
+      "changePassword": "Changer le mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmation": "Confirmation",
+      "savePassword": "Enregistrer le mot de passe",
+      "passwordUpdated": "Mot de passe mis à jour",
+      "changeImage": "Changer",
+      "favoriteStrategies": "Stratégie favorite",
+      "myStrategies": "Mes stratégies",
+      "displayed": "affichées"
+    },
+    "strategy": {
+      "duplicate": "Dupliquer la stratégie",
+      "edit": "Modifier la stratégie",
+      "delete": "Supprimer la stratégie",
+      "deleting": "Suppression...",
+      "reinforcedWalls": "Murs renforcés",
+      "gadgets": "GADGETS",
+      "utilities": "UTILITAIRES",
+      "createdBy": "Créée par",
+      "deleteConfirm": "Voulez-vous vraiment supprimer cette stratégie ?",
+      "deleteError": "Impossible de supprimer cette stratégie.",
+      "loadError": "Impossible de charger cette stratégie.",
+      "loading": "Chargement...",
+      "community": "Stratégies de la communauté",
+      "create": "+ CRÉER UNE NOUVELLE STRATÉGIE",
+      "empty": "Aucune stratégie pour le moment. Soyez le premier à en créer une !",
+      "notFound": "Aucune stratégie trouvée."
+    },
+    "filters": {
+      "strategyName": "Nom de la stratégie",
+      "strategyPlaceholder": "Ex : Defense Full Electric...",
+      "agents": "Agents impliqués",
+      "fullSquad": "Escouade complète (Maximum 5 agents)",
+      "bombSite": "Site de bombe",
+      "allSites": "Tous les sites",
+      "favorites": "Favoris",
+      "search": "RECHERCHER"
+    },
+    "editor": {
+      "titlePlaceholder": "Titre de la stratégie",
+      "bombLocation": "Emplacement des bombes :",
+      "chooseSite": "-- Choisir un site --",
+      "reinforcements": "Renforcements",
+      "wall": "+ Mur",
+      "deleteModeOn": "Mode Suppr ON",
+      "deleteModeOff": "Mode Suppr OFF",
+      "chooseAgent": "Choisir un Agent",
+      "agentAlreadySelected": "{{name}} est déjà sur la carte !",
+      "maxAgents": "Action impossible : Une escouade ne peut pas dépasser 5 agents.",
+      "maxReinforcements": "Limite de 10 renforcements atteinte !",
+      "limitReached": "Limite atteinte !",
+      "noActiveAgents": "Aucun agent sélectionné..."
+    },
+    "notFound": {
+      "title": "Erreur 404",
+      "message": "On dirait un mur invisible ! Aucune salle secrète ni butin trouvé ici.",
+      "ok": "OK"
+    },
+    "map-name": {
+      "bank": "Banque",
+      "border": "Frontière",
+      "chalet": "Chalet",
+      "clubhouse": "Club House",
+      "coastline": "Littoral",
+      "consulate": "Consulat",
+      "emeraldplains": "Plaines d'émeraudes",
+      "fortress": "Forteresse",
+      "house": "Maison",
+      "kafe-dostoyevsky": "Café Dostoyevsky",
+      "kanal": "Canal",
+      "nighthavenlabs": "Labo de Nighthaven",
+      "plane": "Avion",
+      "villa": "Villa",
+      "oregon": "Oregon",
+      "outback": "Outback",
+      "skycraper": "Gratte-ciel",
+      "themepark": "Parc D'attraction"
+    }
   },
   "en": {
     "login": {
       "title-button": "LOG IN",
-      "username-placeholder": "Enter your username"
+      "username-placeholder": "Enter your username",
+      "auto-login": "Trying to reconnect",
+      "error": "Login error"
     },
     "register": {
       "title-part1": "CREATE AN",
@@ -28,11 +149,128 @@
       "title-button": "REGISTER",
       "username-placeholder": "Enter an username",
       "password-placeholder": "Enter a password",
-      "repeat-password": "Repeat the password"
+      "repeat-password": "Repeat the password",
+      "form-required": "You need to complete the form.",
+      "password-mismatch": "Passwords do not match.",
+      "error": "An error occurred: {{message}}"
     },
     "username": "Username",
     "password": "Password",
     "loading": "Loading...",
-    "no-data-founded": "No data was found."
+    "no-data-founded": "No data was found.",
+    "common": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "back": "Go back",
+      "showMore": "Show more",
+      "search": "Search",
+      "none": "No option",
+      "createdBy": "Created by",
+      "show": "Show",
+      "hide": "Hide",
+      "addFavorite": "Add to favorites",
+      "removeFavorite": "Remove from favorites"
+    },
+    "nav": {
+      "openMenu": "Open main menu",
+      "openUserMenu": "Open user menu",
+      "profile": "Profile",
+      "admin": "Admin",
+      "logout": "Log out",
+      "login": "Log in",
+      "register": "Register"
+    },
+    "home": {
+      "selectMap": "SELECT A",
+      "map": "MAP",
+      "availableMaps": "{{count}} maps available for your strategies",
+      "loading": "Loading content...",
+      "strategies": "STRAT",
+      "view": "View"
+    },
+    "profile": {
+      "avatar": "Avatar",
+      "strategiesCreated": "strategies created",
+      "favorites": "favorites",
+      "changePassword": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmation": "Confirmation",
+      "savePassword": "Save password",
+      "passwordUpdated": "Password updated",
+      "changeImage": "Change",
+      "favoriteStrategies": "Favorite strategy",
+      "myStrategies": "My strategies",
+      "displayed": "displayed"
+    },
+    "strategy": {
+      "duplicate": "Duplicate strategy",
+      "edit": "Edit strategy",
+      "delete": "Delete strategy",
+      "deleting": "Deleting...",
+      "reinforcedWalls": "Reinforced walls",
+      "gadgets": "GADGETS",
+      "utilities": "UTILITIES",
+      "createdBy": "Created by",
+      "deleteConfirm": "Do you really want to delete this strategy?",
+      "deleteError": "Unable to delete this strategy.",
+      "loadError": "Unable to load this strategy.",
+      "loading": "Loading...",
+      "community": "Community strategies",
+      "create": "+ CREATE A NEW STRATEGY",
+      "empty": "No strategy yet. Be the first to create one!",
+      "notFound": "No strategy found."
+    },
+    "filters": {
+      "strategyName": "Strategy name",
+      "strategyPlaceholder": "Ex: Defense Full Electric...",
+      "agents": "Agents involved",
+      "fullSquad": "Full squad (Maximum 5 agents)",
+      "bombSite": "Bomb site",
+      "allSites": "All sites",
+      "favorites": "Favorites",
+      "search": "SEARCH"
+    },
+    "editor": {
+      "titlePlaceholder": "Strategy title",
+      "bombLocation": "Bomb location:",
+      "chooseSite": "-- Choose a site --",
+      "reinforcements": "Reinforcements",
+      "wall": "+ Wall",
+      "deleteModeOn": "Delete mode ON",
+      "deleteModeOff": "Delete mode OFF",
+      "chooseAgent": "Choose an Agent",
+      "agentAlreadySelected": "{{name}} is already on the map!",
+      "maxAgents": "Action impossible: A squad cannot exceed 5 agents.",
+      "maxReinforcements": "Limit of 10 reinforcements reached!",
+      "limitReached": "Limit reached!",
+      "noActiveAgents": "No agent selected..."
+    },
+    "notFound": {
+      "title": "Error 404",
+      "message": "Looks like an invisible wall! No secret rooms or loot found here.",
+      "ok": "OK"
+    },
+    "map-name": {
+      "bank": "Bank",
+      "border": "Border",
+      "chalet": "Chalet",
+      "clubhouse": "Club House",
+      "coastline": "Coastline",
+      "consulate": "Consulate",
+      "emeraldplains": "Emerald Plains",
+      "fortress": "Fortress",
+      "house": "House",
+      "kafe-dostoyevsky": "Kafe Dostoyevsky",
+      "kanal": "Kanal",
+      "nighthavenlabs": "Nighthaven Labs",
+      "plane": "Plane",
+      "villa": "Villa",
+      "oregon": "Oregon",
+      "outback": "Outback",
+      "skycraper": "Skycraper",
+      "themepark": "Theme Park"
+    }
   }
 }
