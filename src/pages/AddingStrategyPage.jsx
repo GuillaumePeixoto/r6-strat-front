@@ -177,11 +177,17 @@ function StrategyMapPage() {
     setActiveAgents((prev) => prev.filter((a) => a.instanceId !== instanceId));
   };
 
-  const addUtilityToMap = (instanceId, utility, position = null) => {
-
-    const agent = activeAgents.find((a) => a.instanceId === instanceId);
+  const addUtilityToMap = (
+    instanceId,
+    utility,
+    position = null,
+    agentOverride = null,
+  ) => {
+    const agent =
+      agentOverride || activeAgents.find((a) => a.instanceId === instanceId);
     if (!agent) return;
     const targetUtil = agent.currentUtilities.find((u) => u._id === utility._id);
+    if (!targetUtil) return;
     const otherUtilsWithMarkers = agent.currentUtilities.filter(
       (u) => u._id !== utility._id && u.placedCount > 0,
     );
@@ -271,14 +277,24 @@ function StrategyMapPage() {
     );
   };
 
-  const addGadgetToMap = (instanceId, gadget, position = null) => {
-    const agent = activeAgents.find((a) => a.instanceId === instanceId);
+  const addGadgetToMap = (
+    instanceId,
+    gadget,
+    position = null,
+    agentOverride = null,
+  ) => {
+    const agent =
+      agentOverride || activeAgents.find((a) => a.instanceId === instanceId);
     if (!agent) {
       console.error("Agent introuvable pour l'instance :", instanceId);
       return;
     }
 
-    const targetGadget = agent.currentGadgets.find((g) => g.id === gadget.id);
+    const gadgetId = String(gadget._id ?? gadget.id);
+    const targetGadget = agent.currentGadgets.find(
+      (g) => String(g._id ?? g.id) === gadgetId,
+    );
+    if (!targetGadget) return;
     if (targetGadget.placedCount >= targetGadget.maxUse) {
       console.warn("Limite atteinte pour ce gadget");
       return;
@@ -323,7 +339,7 @@ function StrategyMapPage() {
             ? {
                 ...a,
                 currentGadgets: a.currentGadgets.map((g) =>
-                  g._id === gadget._id
+                  String(g._id ?? g.id) === gadgetId
                     ? { ...g, placedCount: g.placedCount - 1 }
                     : g,
                 ),
@@ -347,7 +363,7 @@ function StrategyMapPage() {
           ? {
               ...a,
               currentGadgets: a.currentGadgets.map((g) =>
-                g._id === gadget._id
+                String(g._id ?? g.id) === gadgetId
                   ? { ...g, placedCount: g.placedCount + 1 }
                   : g,
               ),
@@ -436,14 +452,18 @@ function StrategyMapPage() {
 
   const hydrateStrategy = async (id, isDuplicate = false, agentsData = []) => {
     try {
-      const response = await api.get(`/strategy/${id}`);
+      const response = await api.get(`/api/strategies/${id}`);
       const data = response.data;
+      const strategyDetails = data.infosStrategy || {};
+      const savedAgents = strategyDetails.agents || [];
 
-      setSelectedSiteId(String(data.bombsite.id));
+      setSelectedSiteId(String(data.bombSiteLocation?._id || data.bombSiteLocation));
       setTitreStrategy(isDuplicate ? `${data.title} - Copie` : data.title);
 
-      for (const savedAgent of data.detail_strategy.agents) {
-        const agentData = agentsData.find((a) => a.id === savedAgent.id_agent);
+      for (const savedAgent of savedAgents) {
+        const agentData = agentsData.find(
+          (a) => String(a._id) === String(savedAgent.id_agent),
+        );
         if (!agentData) {
           console.warn(
             `Agent ID ${savedAgent.id_agent} non trouvé dans la liste globale.`,
@@ -473,13 +493,18 @@ function StrategyMapPage() {
           lng: savedAgent.x,
         });
 
-        if (savedAgent.agentObject) {
-          for (const g of savedAgent.agentObject) {
+        if (savedAgent.gadgets) {
+          for (const g of savedAgent.gadgets) {
             const gadgetData = agentData.agentObject?.find(
-              (ag) => ag._id === g.id_bdd,
+              (ag) => String(ag._id) === String(g.id_bdd),
             );
             if (gadgetData) {
-              addGadgetToMap(instanceId, gadgetData, { lat: g.y, lng: g.x });
+              addGadgetToMap(
+                instanceId,
+                gadgetData,
+                { lat: g.y, lng: g.x },
+                newAgentEntry,
+              );
             }
           }
         }
@@ -487,17 +512,22 @@ function StrategyMapPage() {
         if (savedAgent.utility) {
           for (const u of savedAgent.utility) {
             const utilityData = agentData.utilities?.find(
-              (au) => au._id === u.id_bdd,
+              (au) => String(au._id) === String(u.id_bdd),
             );
             if (utilityData) {
-              addUtilityToMap(instanceId, utilityData, { lat: u.y, lng: u.x });
+              addUtilityToMap(
+                instanceId,
+                utilityData,
+                { lat: u.y, lng: u.x },
+                newAgentEntry,
+              );
             }
           }
         }
       }
 
-      if (data.detail_strategy.walls) {
-        data.detail_strategy.walls.forEach((w) => {
+      if (strategyDetails.walls) {
+        strategyDetails.walls.forEach((w) => {
           spawnWallElement({ lat: w.y, lng: w.x });
         });
       }
@@ -609,7 +639,7 @@ function StrategyMapPage() {
 
     try {
         if(editMode){
-            const response = await api.put(`/api/strategy/${editId}`, data);
+            const response = await api.put(`/api/strategies/${editId}`, data);
             console.log(response);
             navigate(`/map/${slug}`)
             return;

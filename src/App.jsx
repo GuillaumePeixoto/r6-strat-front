@@ -27,6 +27,7 @@ function App() {
           <Route path="/map/:slug" element={<ProtectedRoute><StrategiesList /></ProtectedRoute>}></Route>
           <Route path="/strategies/:id" element={<ProtectedRoute><DetailsStrategyPage /></ProtectedRoute>} />
           <Route path="/map/:slug/add" element={<ProtectedRoute> <AddingStrategyPage /> </ProtectedRoute>}></Route> 
+          <Route path="/map/:slug/add/:id" element={<ProtectedRoute> <AddingStrategyPage /> </ProtectedRoute>}></Route>
           <Route path="/profile" element={<ProtectedRoute> <Profil /> </ProtectedRoute>}></Route> 
           <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
         </Routes>

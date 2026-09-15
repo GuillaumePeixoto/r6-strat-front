@@ -1,15 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import StrategyMap from "../components/StrategyMap";
+import { AuthContext } from "../context/auth.context";
 
 function DetailsStrategyPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedUserId } = useContext(AuthContext);
   const [strategy, setStrategy] = useState(null);
   const [map, setMap] = useState(null);
   const [agents, setAgents] = useState([]);
   const [error, setError] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const loadStrategy = async () => {
@@ -37,6 +40,21 @@ function DetailsStrategyPage() {
   const details = strategy?.infosStrategy || {};
   const wallCount = details.walls?.length || 0;
   const strategyAgents = useMemo(() => details.agents || [], [details.agents]);
+  const isCreator = strategy?.user && String(strategy.user._id) === String(loggedUserId);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Voulez-vous vraiment supprimer cette stratégie ?")) return;
+
+    setIsDeleting(true);
+    try {
+      await api.delete(`/api/strategies/${id}`);
+      navigate(`/map/${map.slug}`);
+    } catch (requestError) {
+      console.error("Erreur lors de la suppression de la stratégie", requestError);
+      setError("Impossible de supprimer cette stratégie.");
+      setIsDeleting(false);
+    }
+  };
 
   if (error) return <main className="p-8 text-white">{error}</main>;
   if (!strategy || !map)
@@ -51,18 +69,46 @@ function DetailsStrategyPage() {
         >
           ← Revenir en arrière
         </button>
-        <button
-          type="button"
-          onClick={() =>
-            navigate(`/map/${map.slug}/add?duplicate=${strategy._id}`)
-          }
-          className="border border-[#db9e15] px-4 py-2 text-sm font-bold text-[#db9e15]"
-        >
-          Dupliquer la stratégie
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() =>
+              navigate(`/map/${map.slug}/add?duplicate=${strategy._id}`)
+            }
+            className="border border-[#db9e15] hover:bg-[#db9e15] hover:text-white px-4 py-2 text-sm font-bold text-[#db9e15]"
+          >
+            📋 Dupliquer la stratégie
+          </button>
+          {isCreator && (
+            <>
+              <button
+                type="button"
+                onClick={() => navigate(`/map/${map.slug}/add/${strategy._id}`)}
+                className="border border-[#db9e15] px-4 py-2 text-sm font-bold text-[#db9e15] hover:bg-[#db9e15] hover:text-white"
+              >
+                ✏️ Modifier la stratégie
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="border border-red-500 px-4 py-2 text-sm font-bold text-red-400 hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isDeleting ? "Suppression..." : "🗑️ Supprimer la stratégie"}
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
-      <h1 className="mb-4 text-2xl font-bold text-white">{strategy.title}</h1>
+      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+        <h1 className="text-2xl font-bold text-white">{strategy.title}</h1>
+        {strategy.user?.username && (
+          <p className="text-sm text-gray-300">
+            Créée par <span className="font-semibold text-white">{strategy.user.username}</span>
+          </p>
+        )}
+      </div>
       <StrategyMap mapDetails={{ ...map, agents }} strategy={strategy} />
 
       <section className="second-bg-color mt-4 p-4 text-white">
@@ -110,7 +156,7 @@ function DetailsStrategyPage() {
                           agent.agentObject[0].maxUse}
                     </p>
                     <div
-                      className="flex items-center justify-center bg-black h-8 w-8 rounded-2xl border-2 "
+                      className="flex items-center justify-center bg-black h-8 w-8 mt-1 rounded-2xl border-2 "
                       style={{ borderColor: agent.color }}
                     >
                       <img
@@ -132,7 +178,7 @@ function DetailsStrategyPage() {
                         savedAgent.utility.length + " / " + utilityUsed?.maxUse}
                     </span>
                     <div
-                      className="flex items-center justify-center bg-white h-8 w-8 rounded-2xl border-2 "
+                      className="flex items-center justify-center bg-white h-8 w-8 mt-1 rounded-2xl border-2 "
                       style={{ borderColor: agent.color }}
                     >
                       <img
