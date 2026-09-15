@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../services/api";
 import StrategyCard from "../components/StrategyCard";
 import { Link, useNavigate } from "react-router-dom";
-import Select, { components } from 'react-select';
+import AgentSelector from "../components/AgentSelector";
+import { AuthContext } from "./../context/auth.context";
 
 function PasswordField({ label, value, onChange }) {
   const [visible, setVisible] = useState(false);
@@ -98,18 +99,22 @@ function Profil() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [profilImage, setProfilImage] = useState("");
+  const [newProfilImage, setNewProfilImage] = useState(null);
   const [ownStrats, setOwnStrats] = useState([]);
   const [ownStratsTotal, setOwnStratsTotal] = useState(0);
   const [favoriteStrats, setFavoriteStrats] = useState([]);
   const [favoriteStratsTotal, setFavoriteStratsTotal] = useState(0);
   const [agentsList, setAgentsList] = useState([]);
   const [changeImage, setChangeImage] = useState(false);
+
   const navigate = useNavigate();
+  const { setLoggedUserProfilImage } = useContext(AuthContext);
 
   const getProfileInfos = async () => {
     try {
       const response = await api.get("/api/profile");
       setUsername(response.data.username);
+      setProfilImage(response.data.image)
       setOwnStrats(response.data.ownStrategies);
       setOwnStratsTotal(response.data.ownStratsTotal);
       setFavoriteStrats(response.data.favoriteStrategies);
@@ -173,57 +178,53 @@ function Profil() {
     }
   };
 
+  const toggleChangeImage = () => {
+    setNewProfilImage(null);
+    setChangeImage(!changeImage);
+  };
+
+  const toggleNewProfilImage = (agentData) => {
+    
+    console.log(agentData);
+    setNewProfilImage([agentData]);
+  }
+
+  const validChangeProfilImage = async () => {
+    try{
+      console.log(newProfilImage);
+      const response = await api.put('/api/change-profil-image', {profilImage: newProfilImage[0].iconAgent});
+      if(response.status == 200){
+        setProfilImage(newProfilImage[0].iconAgent);
+        setLoggedUserProfilImage(newProfilImage[0].iconAgent);
+        toggleChangeImage();
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     getProfileInfos();
     fetchAgentsList();
   }, []);
 
-  const CustomOption = (props) => (
-    <components.Option {...props}>
-      <div className="flex items-center gap-2">
-        <img
-          src={props.data.iconAgent}
-          className="w-8 h-8 bg-black border border-gray-600"
-          alt=""
-        />
-        <span className="text-xs uppercase font-bold">{props.data.name}</span>
-      </div>
-    </components.Option>
-  );
-
   return (
     <div className="min-h-screen bg-[#0F1115] text-[#ECEAE4] font-sans">
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* En-tête profil */}
-        <div className="flex items-start gap-5 pb-8 border-b border-[#262B34]">
+        <div className="flex items-start gap-5 pb-3">
           <div>
-            <div className="h-30 w-30 shrink-0 bg-[#1D2129] border border-[#2A2E37] flex items-center justify-center">
-              <span className="text-[12px] text-[#5B6170]">Avatar</span>
-            </div>
-            {changeImage && (
-              <Select
-                closeMenuOnSelect={false}
-                isSearchable={false}
-                placeholder=""
-                options={agentsList}
-                value={profilImage}
-                onChange={(selected) =>
-                  setProfilImage(selected)
-                }
-                getOptionValue={(option) => option.id}
-                getOptionLabel={(option) => option.name}
-                components={{
-                  Option: CustomOption
-                }}
-                className="mt-3"
-              />
+            {(profilImage || newProfilImage) ? (
+              newProfilImage ? (
+                <img src={newProfilImage[0].iconAgent} className="h-30 w-30" />
+              ) : (
+                <img src={profilImage} className="h-30 w-30" />
+              )
+            ) : (
+              <div className="h-30 w-30 shrink-0 bg-[#1D2129] border border-[#2A2E37] flex items-center justify-center">
+                <span className="text-[12px] text-[#5B6170]">Avatar</span>
+              </div>
             )}
-            <button
-              onClick={() => setChangeImage(!changeImage)}
-              className="mt-3 w-full justify-center inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
-            >
-              {!changeImage ? 'Changer' : 'Annuler'}
-            </button>
           </div>
 
           <div className="flex-1 min-w-0">
@@ -244,6 +245,33 @@ function Profil() {
 
             <PasswordPanel open={showPassword} />
           </div>
+        </div>
+        <div>
+          {changeImage && (
+            <div>
+              <AgentSelector
+                allAgents={agentsList}
+                activeAgents={newProfilImage ? newProfilImage : []}
+                onSelect={toggleNewProfilImage}
+              />
+              <button onClick={() => validChangeProfilImage()}  className="cursor-pointer mt-3 me-3 justify-center inline-flex items-center gap-2 text-[14px] text-white hover:text-black border bg-[#db9e15] hover:bg-(--main-yellow) border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors">
+                Valider
+              </button>
+              <button
+                onClick={() => toggleChangeImage()}
+                className="cursor-pointer mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          )}
+          <button
+            hidden={changeImage}
+            onClick={() => toggleChangeImage()}
+            className="cursor-pointer mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+          >
+            Changer
+          </button>
         </div>
 
         {/* Favoris */}

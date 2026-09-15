@@ -5,6 +5,7 @@ const AuthContext = createContext();
 function AuthWrapper({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState(null);
+  const [loggedUserProfilImage, setLoggedUserProfilImage] = useState(null);
   const [isLoadingContext, setIsLoadingContext] = useState(true); // pour éviter un "flash" avant la vérification
 
   const verifyUser = async () => {
@@ -32,6 +33,7 @@ function AuthWrapper({ children }) {
 
       setIsLoggedIn(true);
       setLoggedUserId(data.payload.id);
+      setLoggedUserProfilImage(data.image);
     } catch (err) {
       console.log(err);
       localStorage.removeItem("token");
@@ -52,6 +54,8 @@ function AuthWrapper({ children }) {
     loggedUserId,
     setLoggedUserId,
     isLoadingContext,
+    loggedUserProfilImage,
+    setLoggedUserProfilImage,
     verifyUser,
   };
 

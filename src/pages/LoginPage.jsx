@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { t } = useTranslation();
-  const { isLoggedIn, isLoadingContext, setIsLoggedIn, setLoggedUserId } = useContext(AuthContext);
+  const { isLoggedIn, isLoadingContext, setIsLoggedIn, setLoggedUserId, setLoggedUserProfilImage } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
@@ -39,6 +39,7 @@ function Login() {
 
       localStorage.setItem("token", response.data.token);
       setLoggedUserId(response.data.payload.id);
+      setLoggedUserProfilImage(response.data.profilImage);
       setIsLoggedIn(true);
       navigate("/");
       // redirection à ajouter ici selon ton système de routing
