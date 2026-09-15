@@ -30,7 +30,7 @@ function PasswordField({ label, value, onChange }) {
   );
 }
 
-function PasswordPanel({ open }) {
+function PasswordPanel({ open, hidePanel }) {
   const [current, setCurrent] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -85,6 +85,12 @@ function PasswordPanel({ open }) {
         >
           Enregistrer le mot de passe
         </button>
+        <button
+          onClick={() => hidePanel()}
+          className="bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-4 py-2 transition-colors"
+        >
+          Annuler
+        </button>
         {saved && (
           <span className="text-[12px] text-[#6FCF97]">
             Mot de passe mis à jour
@@ -114,7 +120,7 @@ function Profil() {
     try {
       const response = await api.get("/api/profile");
       setUsername(response.data.username);
-      setProfilImage(response.data.image)
+      setProfilImage(response.data.image);
       setOwnStrats(response.data.ownStrategies);
       setOwnStratsTotal(response.data.ownStratsTotal);
       setFavoriteStrats(response.data.favoriteStrategies);
@@ -184,24 +190,25 @@ function Profil() {
   };
 
   const toggleNewProfilImage = (agentData) => {
-    
     console.log(agentData);
     setNewProfilImage([agentData]);
-  }
+  };
 
   const validChangeProfilImage = async () => {
-    try{
+    try {
       console.log(newProfilImage);
-      const response = await api.put('/api/change-profil-image', {profilImage: newProfilImage[0].iconAgent});
-      if(response.status == 200){
+      const response = await api.put("/api/change-profil-image", {
+        profilImage: newProfilImage[0].iconAgent,
+      });
+      if (response.status == 200) {
         setProfilImage(newProfilImage[0].iconAgent);
         setLoggedUserProfilImage(newProfilImage[0].iconAgent);
         toggleChangeImage();
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     getProfileInfos();
@@ -209,12 +216,12 @@ function Profil() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0F1115] text-[#ECEAE4] font-sans">
+    <div className="min-h-screen text-[#ECEAE4] font-sans">
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* En-tête profil */}
         <div className="flex items-start gap-5 pb-3">
           <div>
-            {(profilImage || newProfilImage) ? (
+            {profilImage || newProfilImage ? (
               newProfilImage ? (
                 <img src={newProfilImage[0].iconAgent} className="h-30 w-30" />
               ) : (
@@ -238,12 +245,13 @@ function Profil() {
 
             <button
               onClick={() => setShowPassword((v) => !v)}
-              className="mt-3 inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+              hidden={showPassword}
+              className="mt-3 bg-[#0F1115] inline-flex items-center gap-2 text-[13px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
             >
               Changer le mot de passe
             </button>
 
-            <PasswordPanel open={showPassword} />
+            <PasswordPanel open={showPassword} hidePanel={() => setShowPassword(!showPassword)} />
           </div>
         </div>
         <div>
@@ -254,12 +262,15 @@ function Profil() {
                 activeAgents={newProfilImage ? newProfilImage : []}
                 onSelect={toggleNewProfilImage}
               />
-              <button onClick={() => validChangeProfilImage()}  className="cursor-pointer mt-3 me-3 justify-center inline-flex items-center gap-2 text-[14px] text-white hover:text-black border bg-[#db9e15] hover:bg-(--main-yellow) border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors">
+              <button
+                onClick={() => validChangeProfilImage()}
+                className="cursor-pointer mt-3 me-3 justify-center inline-flex items-center gap-2 text-[14px] text-white hover:text-black border bg-[#db9e15] hover:bg-(--main-yellow) border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+              >
                 Valider
               </button>
               <button
                 onClick={() => toggleChangeImage()}
-                className="cursor-pointer mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+                className="cursor-pointer bg-[#0F1115] mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
               >
                 Annuler
               </button>
@@ -268,7 +279,7 @@ function Profil() {
           <button
             hidden={changeImage}
             onClick={() => toggleChangeImage()}
-            className="cursor-pointer mt-3 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
+            className="w-30 bg-[#0F1115] cursor-pointer mt-0 justify-center inline-flex items-center gap-2 text-[14px] text-[#8B909B] hover:text-[#ECEAE4] border border-[#2A2E37] hover:border-[#3A404C] px-3 py-1.5 transition-colors"
           >
             Changer
           </button>

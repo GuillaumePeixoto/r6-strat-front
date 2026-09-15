@@ -55,10 +55,10 @@ function NavBar() {
                 {isLoggedIn ? (
                   <Menu as="div" className="hidden sm:block relative ml-3">
                     <div>
-                      <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <MenuButton className={`${!loggedUserProfilImage ? 'rounded-full' : ''} relative flex bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800`}>
                         <span className="sr-only">Open user menu</span>
                         <img
-                          className="h-9 rounded-full"
+                          className={`h-9 ${!loggedUserProfilImage ? 'rounded-full' : ''}`}
                           src={loggedUserProfilImage ? loggedUserProfilImage : (ProfileLogo)}
                           alt="Profile"
                         />
