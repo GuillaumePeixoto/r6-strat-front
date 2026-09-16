@@ -7,7 +7,7 @@ function Sidebar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
     <div className="sidebar pe-4 h-full overflow-y-auto">
       <div id="active-agents-list" className="agent-list">
         <h2 className="font-bold text-[#db9e15] mb-3 uppercase text-sm tracking-wider">
-          {t('editor.chooseAgent')}
+          {t('editor.agentList')}
         </h2>
       </div>
 

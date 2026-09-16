@@ -9,6 +9,8 @@ import AgentSelector from "../components/AgentSelector";
 import StrategyControl from "../components/StrategyControl";
 import Sidebar from "../components/Sidebar";
 import { useTranslation } from "react-i18next";
+import { useContext } from "react";
+import { ToastContext } from "../context/toast.context";
 
 const MAX_REINFORCEMENTS = 10;
 
@@ -18,6 +20,7 @@ function StrategyMapPage() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const duplicateId = searchParams.get("duplicate");
+  const { showNotif } = useContext(ToastContext);
 
   // --- Refs (objets Leaflet, pas affichés directement dans le JSX) ---
   const mapContainerRef = useRef(null); // équivalent du ref="mapContainer" sur la div
@@ -57,7 +60,7 @@ function StrategyMapPage() {
 
   const spawnWallElement = (position = null) => {
     if (!canAddReinforcement) {
-      alert(t("editor.maxReinforcements"));
+      showNotif(t("editor.maxReinforcements"), 'warning');
       return;
     }
 
@@ -119,12 +122,15 @@ function StrategyMapPage() {
 
     const alreadyExists = activeAgents.some((a) => a.id === agentData.id);
     if (alreadyExists) {
-      alert(t("editor.agentAlreadySelected", { name: agentData.name }));
+      showNotif(
+        t("editor.agentAlreadySelected", { name: agentData.name }),
+        "warning",
+      );
       return;
     }
 
     if (activeAgents.length >= 5) {
-      alert(t("editor.maxAgents"));
+      showNotif(t("editor.maxAgents"), "warning");
       return;
     }
 
@@ -188,7 +194,9 @@ function StrategyMapPage() {
     const agent =
       agentOverride || activeAgents.find((a) => a.instanceId === instanceId);
     if (!agent) return;
-    const targetUtil = agent.currentUtilities.find((u) => u._id === utility._id);
+    const targetUtil = agent.currentUtilities.find(
+      (u) => u._id === utility._id,
+    );
     if (!targetUtil) return;
     const otherUtilsWithMarkers = agent.currentUtilities.filter(
       (u) => u._id !== utility._id && u.placedCount > 0,
@@ -202,7 +210,7 @@ function StrategyMapPage() {
     }
 
     if (targetUtil.placedCount >= utility.maxUse) {
-      alert(t("editor.limitReached"));
+      showNotif(t("editor.limitReached"), 'warning');
       return;
     }
 
@@ -253,7 +261,12 @@ function StrategyMapPage() {
         ),
       );
     };
-    marker.bindPopup(popupContent, { className: "w-10 m-0", minWidth: 30, maxWidth: 30, closeButton: false });
+    marker.bindPopup(popupContent, {
+      className: "w-10 m-0",
+      minWidth: 30,
+      maxWidth: 30,
+      closeButton: false,
+    });
 
     mapMarkersRef.current[instanceId].utilityMarkers.push({
       id_bdd: targetUtil._id,
@@ -289,6 +302,7 @@ function StrategyMapPage() {
       agentOverride || activeAgents.find((a) => a.instanceId === instanceId);
     if (!agent) {
       console.error("Agent introuvable pour l'instance :", instanceId);
+      showNotif(t("error.genericError"));
       return;
     }
 
@@ -299,6 +313,7 @@ function StrategyMapPage() {
     if (!targetGadget) return;
     if (targetGadget.placedCount >= targetGadget.maxUse) {
       console.warn("Limite atteinte pour ce gadget");
+      showNotif(t("error.genericError"));
       return;
     }
 
@@ -416,7 +431,6 @@ function StrategyMapPage() {
   }, [selectedSiteId]);
 
   const fetchMapDetails = async (details) => {
-
     try {
       const h = 900;
       const w = 1600 * details.floorCount;
@@ -433,13 +447,14 @@ function StrategyMapPage() {
       mapRef.current.fitBounds(imageBounds);
     } catch (error) {
       console.error("Erreur lors du chargement de la map", error);
+      showNotif(t("error.genericError"));
     }
   };
 
   const fetchData = async () => {
     try {
       const [mapRes, agentsRes] = await Promise.all([
-        api.get(`/api/maps/${slug}`, { params: { include: "bombSites" }}),
+        api.get(`/api/maps/${slug}`, { params: { include: "bombSites" } }),
         api.get("/api/agents"),
       ]);
       setMapDetails(mapRes.data);
@@ -448,6 +463,7 @@ function StrategyMapPage() {
       return { mapData: mapRes.data, agentsData: agentsRes.data }; // 👈 ajouté
     } catch (error) {
       console.error("Erreur de chargement", error);
+      showNotif(t("error.genericError"));
       return { mapData: null, agentsData: [] };
     }
   };
@@ -459,7 +475,9 @@ function StrategyMapPage() {
       const strategyDetails = data.infosStrategy || {};
       const savedAgents = strategyDetails.agents || [];
 
-      setSelectedSiteId(String(data.bombSiteLocation?._id || data.bombSiteLocation));
+      setSelectedSiteId(
+        String(data.bombSiteLocation?._id || data.bombSiteLocation),
+      );
       setTitreStrategy(isDuplicate ? `${data.title} - Copie` : data.title);
 
       for (const savedAgent of savedAgents) {
@@ -470,6 +488,7 @@ function StrategyMapPage() {
           console.warn(
             `Agent ID ${savedAgent.id_agent} non trouvé dans la liste globale.`,
           );
+          showNotif(t("error.genericError"));
           continue;
         }
 
@@ -535,6 +554,7 @@ function StrategyMapPage() {
       }
     } catch (err) {
       console.error("Erreur lors de l'hydratation :", err);
+      showNotif(t("error.genericError"));
     }
   };
 
@@ -632,7 +652,6 @@ function StrategyMapPage() {
 
       saveFormat.agents.push(agentData);
     });
-    console.log('saveFormat',saveFormat);
     return saveFormat;
   };
 
@@ -640,17 +659,18 @@ function StrategyMapPage() {
     const data = generateSaveData();
 
     try {
-        if(editMode){
-            const response = await api.put(`/api/strategies/${editId}`, data);
-            console.log(response);
-            navigate(`/map/${slug}`)
-            return;
-        }
+      if (editMode) {
+        await api.put(`/api/strategies/${editId}`, data);
+        showNotif(t('strategy.strategyUpdated'), 'success');
+        navigate(`/map/${slug}`);
+        return;
+      }
 
-        const response = await api.post("/api/save-strategy", data);
-        console.log(response);
-        navigate(`/map/${slug}`)
+      await api.post("/api/save-strategy", data);
+      showNotif(t('strategy.strategyAdded'), 'success');
+      navigate(`/map/${slug}`);
     } catch (err) {
+      showNotif(t('strategy.strategyAdded'));
       console.error("Erreur de sauvegarde", err);
     }
   };

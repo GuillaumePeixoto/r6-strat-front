@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AgentSelector from "../components/AgentSelector";
 import { AuthContext } from "./../context/auth.context";
 import { useTranslation } from "react-i18next";
+import { ToastContext } from "../context/toast.context";
 
 function PasswordField({ label, value, onChange }) {
   const [visible, setVisible] = useState(false);
@@ -118,6 +119,7 @@ function Profil() {
   const [changeImage, setChangeImage] = useState(false);
 
   const navigate = useNavigate();
+  const {showNotif} = useContext(ToastContext);
   const { setLoggedUserProfilImage } = useContext(AuthContext);
 
   const getProfileInfos = async () => {
@@ -129,9 +131,8 @@ function Profil() {
       setOwnStratsTotal(response.data.ownStratsTotal);
       setFavoriteStrats(response.data.favoriteStrategies);
       setFavoriteStratsTotal(response.data.favoriteStrategiesTotal);
-      console.log(response);
     } catch (err) {
-      console.log(err);
+      showNotif(err.message);
     }
   };
 
@@ -184,7 +185,7 @@ function Profil() {
       const response = await api.patch(`/api/favorites/${strat.id}`);
       return response.data.isFavorite;
     } catch (err) {
-      console.log(err);
+      showNotif(t('error.saveError')+" :"+err.message)
     }
   };
 
@@ -194,13 +195,11 @@ function Profil() {
   };
 
   const toggleNewProfilImage = (agentData) => {
-    console.log(agentData);
     setNewProfilImage([agentData]);
   };
 
   const validChangeProfilImage = async () => {
     try {
-      console.log(newProfilImage);
       const response = await api.put("/api/change-profil-image", {
         profilImage: newProfilImage[0].iconAgent,
       });
@@ -210,7 +209,7 @@ function Profil() {
         toggleChangeImage();
       }
     } catch (err) {
-      console.log(err);
+      showNotif(t('error.saveError')+" :"+err.message)
     }
   };
 

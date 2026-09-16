@@ -21,6 +21,14 @@
     "password": "Mot de passe",
     "loading": "Chargement...",
     "no-data-founded": "Aucune donnée n'a été trouvée.",
+    "error": {
+      "genericError": "Une erreur est survenue.",
+      "saveError": "Erreur lors de la sauvegarde",
+      "favoriteError": "Erreur d'ajout aux favoris",
+      "mapLoadError": "Impossible de charger la carte.",
+      "agentsLoadError": "Impossible de charger les agents.",
+      "strategiesLoadError": "Impossible de charger les stratégies."
+    },
     "common": {
       "cancel": "Annuler",
       "confirm": "Valider",
@@ -83,7 +91,9 @@
       "community": "Stratégies de la communauté",
       "create": "+ CRÉER UNE NOUVELLE STRATÉGIE",
       "empty": "Aucune stratégie pour le moment. Soyez le premier à en créer une !",
-      "notFound": "Aucune stratégie trouvée."
+      "notFound": "Aucune stratégie trouvée.",
+      "strategyAdded": "Stratégie ajoutée",
+      "strategyUpdated": "Stratégie mise à jour"
     },
     "filters": {
       "strategyName": "Nom de la stratégie",
@@ -104,6 +114,7 @@
       "deleteModeOn": "Mode Suppr ON",
       "deleteModeOff": "Mode Suppr OFF",
       "chooseAgent": "Choisir un Agent",
+      "agentList": "Liste des agents sélectionnés",
       "agentAlreadySelected": "{{name}} est déjà sur la carte !",
       "maxAgents": "Action impossible : Une escouade ne peut pas dépasser 5 agents.",
       "maxReinforcements": "Limite de 10 renforcements atteinte !",
@@ -158,6 +169,14 @@
     "password": "Password",
     "loading": "Loading...",
     "no-data-founded": "No data was found.",
+    "error": {
+      "genericError": "An error occurred.",
+      "saveError": "Failed to save",
+      "favoriteError": "Error adding to favorites",
+      "mapLoadError": "Unable to load the map.",
+      "agentsLoadError": "Unable to load the agents.",
+      "strategiesLoadError": "Unable to load the strategies."
+    },
     "common": {
       "cancel": "Cancel",
       "confirm": "Confirm",
@@ -220,7 +239,9 @@
       "community": "Community strategies",
       "create": "+ CREATE A NEW STRATEGY",
       "empty": "No strategy yet. Be the first to create one!",
-      "notFound": "No strategy found."
+      "notFound": "No strategy found.",
+      "strategyAdded": "Strategy added",
+      "strategyUpdated": "Strategy updated"
     },
     "filters": {
       "strategyName": "Strategy name",
@@ -241,6 +262,7 @@
       "deleteModeOn": "Delete mode ON",
       "deleteModeOff": "Delete mode OFF",
       "chooseAgent": "Choose an Agent",
+      "agentList": "Selected agents list",
       "agentAlreadySelected": "{{name}} is already on the map!",
       "maxAgents": "Action impossible: A squad cannot exceed 5 agents.",
       "maxReinforcements": "Limit of 10 reinforcements reached!",

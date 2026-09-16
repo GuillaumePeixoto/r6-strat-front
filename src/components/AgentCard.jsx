@@ -17,7 +17,7 @@ function AgentCard({ agent, onRemove, onAddGadget, onAddUtility }) {
       <div className="flex flex-row justify-center">
         <div className="gadgets-section flex flex-row">
           {agent.currentGadgets.map((gad) => (
-            <div key={gad.id} className="item-control mx-4 my-auto">
+            <div key={"gadget-"+gad._id} className="item-control mx-4 my-auto">
               <button
                 className="btn-spawn flex flex-col items-center"
                 onClick={() => onAddGadget(agent.instanceId, gad)}
@@ -34,7 +34,7 @@ function AgentCard({ agent, onRemove, onAddGadget, onAddUtility }) {
 
         <div className="utilities-section flex flex-row">
           {agent.currentUtilities.map((ut) => (
-            <div key={ut.id} className="item-control mx-4 my-auto">
+            <div key={"utility-"+ut._id} className="item-control mx-4 my-auto">
               <button
                 className="btn-spawn flex flex-col items-center"
                 onClick={() => onAddUtility(agent.instanceId, ut)}

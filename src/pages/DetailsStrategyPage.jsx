@@ -122,14 +122,11 @@ function DetailsStrategyPage() {
               (entry) => String(entry._id) === String(savedAgent.id_agent),
             );
             if (!agent) return null;
-            console.log("agent", agent);
-            console.log("savedAgent", savedAgent);
             let utilityUsed = {};
             if (savedAgent.utility && savedAgent.utility.length > 0) {
               utilityUsed = agent.utilities.find(
                 (utility) => utility._id == savedAgent.utility[0].id_bdd,
               );
-              console.log(utilityUsed);
             }
             return (
               <div

@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "./../services/api";
 import StrategyFilters from "./../components/StrategyFilters";
 import StrategyCard from "../components/StrategyCard";
 import styles from "./../assets/styles/map-details.module.css";
 import { useTranslation } from "react-i18next";
+import { ToastContext } from "../context/toast.context";
 
 function MapDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showNotif } = useContext(ToastContext);
 
   const [map, setMap] = useState(null);
   const [strategies, setStrategies] = useState([]);
@@ -21,7 +23,9 @@ function MapDetailPage() {
         const response = await api.patch(`/api/favorites/${strat.id}`);
         return response.data.isFavorite;
     }catch(err){
-      console.log(err);
+      console.error("Erreur lors de la modification du favori", err);
+      showNotif(t('error.favoriteError'));
+      
     }
   }
 
@@ -32,6 +36,7 @@ function MapDetailPage() {
       return response.data;
     } catch (error) {
       console.error("Erreur lors du chargement de la map", error);
+      showNotif(t('error.mapLoadError'));
       return null;
     }
   };
@@ -42,6 +47,7 @@ function MapDetailPage() {
       setAgentsList(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des agents:", error);
+      showNotif(t('error.agentsLoadError'));
     }
   };
 
@@ -63,6 +69,7 @@ function MapDetailPage() {
       setStrategies(response.data);
     } catch (error) {
       console.error("Erreur tactique lors de la récupération :", error);
+      showNotif(t('error.strategiesLoadError'));
     } finally {
       setIsLoading(false);
     }
