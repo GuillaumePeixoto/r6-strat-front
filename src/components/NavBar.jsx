@@ -65,7 +65,7 @@ function NavBar() {
                 <select
                   value={i18n.language}
                   onChange={handleChange}
-                  className="bg-[#171A20] border border-[#2A2E37] text-[13px] text-[#ECEAE4] px-2 py-1.5 outline-none focus:border-[#E8833E] cursor-pointer"
+                  className="bg-[#171A20] me-2 border border-[#2A2E37] text-[13px] text-[#ECEAE4] px-2 py-1.5 outline-none focus:border-[#E8833E] cursor-pointer"
                 >
                   <option value="fr">🇫🇷 FR</option>
                   <option value="en">🇬🇧 EN</option>

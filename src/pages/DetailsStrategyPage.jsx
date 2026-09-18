@@ -15,6 +15,7 @@ function DetailsStrategyPage() {
   const [agents, setAgents] = useState([]);
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadStrategy = async () => {
@@ -33,6 +34,8 @@ function DetailsStrategyPage() {
           requestError,
         );
         setError(t('strategy.loadError'));
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -59,8 +62,23 @@ function DetailsStrategyPage() {
   };
 
   if (error) return <main className="p-8 text-white">{error}</main>;
-  if (!strategy || !map)
-    return <main className="p-8 text-white">Chargement...</main>;
+  if (isLoading || !strategy || !map) {
+    return (
+      <main
+        className="main-bg-color min-h-screen flex items-center justify-center text-[#ECEAE4]"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="flex items-center gap-4 text-lg text-[#8B909B]">
+          <span
+            className="h-8 w-8 animate-spin rounded-full border-4 border-[#2A2E37] border-t-[#db9e15]"
+            aria-hidden="true"
+          />
+          <span>{t("loading")}</span>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="main-bg-color flex-1 p-4 sm:p-8">

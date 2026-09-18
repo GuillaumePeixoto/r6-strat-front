@@ -117,9 +117,10 @@ function Profil() {
   const [favoriteStratsTotal, setFavoriteStratsTotal] = useState(0);
   const [agentsList, setAgentsList] = useState([]);
   const [changeImage, setChangeImage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
-  const {showNotif} = useContext(ToastContext);
+  const { showNotif } = useContext(ToastContext);
   const { setLoggedUserProfilImage } = useContext(AuthContext);
 
   const getProfileInfos = async () => {
@@ -185,7 +186,7 @@ function Profil() {
       const response = await api.patch(`/api/favorites/${strat.id}`);
       return response.data.isFavorite;
     } catch (err) {
-      showNotif(t('error.saveError')+" :"+err.message)
+      showNotif(t("error.saveError") + " :" + err.message);
     }
   };
 
@@ -209,14 +210,36 @@ function Profil() {
         toggleChangeImage();
       }
     } catch (err) {
-      showNotif(t('error.saveError')+" :"+err.message)
+      showNotif(t("error.saveError") + " :" + err.message);
     }
   };
 
   useEffect(() => {
-    getProfileInfos();
-    fetchAgentsList();
+    const loadProfile = async () => {
+      await Promise.all([getProfileInfos(), fetchAgentsList()]);
+      setIsLoading(false);
+    };
+
+    loadProfile();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center text-[#ECEAE4]"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="flex items-center gap-4 text-lg text-[#8B909B]">
+          <span
+            className="h-8 w-8 animate-spin rounded-full border-4 border-[#2A2E37] border-t-[#db9e15]"
+            aria-hidden="true"
+          />
+          <span>{t("loading")}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-[#ECEAE4] font-sans">
@@ -232,7 +255,9 @@ function Profil() {
               )
             ) : (
               <div className="h-30 w-30 shrink-0 bg-[#1D2129] border border-[#2A2E37] flex items-center justify-center">
-                <span className="text-[12px] text-[#5B6170]">{t("profile.avatar")}</span>
+                <span className="text-[12px] text-[#5B6170]">
+                  {t("profile.avatar")}
+                </span>
               </div>
             )}
           </div>
@@ -242,7 +267,8 @@ function Profil() {
               {username}
             </h2>
             <p className="text-[13px] text-[#8B909B] mt-0.5">
-              {ownStratsTotal} {t("profile.strategiesCreated")} · {favoriteStratsTotal} {t("profile.favorites")}
+              {ownStratsTotal} {t("profile.strategiesCreated")} ·{" "}
+              {favoriteStratsTotal} {t("profile.favorites")}
             </p>
 
             <button
@@ -253,7 +279,10 @@ function Profil() {
               {t("profile.changePassword")}
             </button>
 
-            <PasswordPanel open={showPassword} hidePanel={() => setShowPassword(!showPassword)} />
+            <PasswordPanel
+              open={showPassword}
+              hidePanel={() => setShowPassword(!showPassword)}
+            />
           </div>
         </div>
         <div>

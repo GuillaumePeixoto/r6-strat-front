@@ -26,7 +26,7 @@ function StrategyMapPage() {
   const mapContainerRef = useRef(null); // équivalent du ref="mapContainer" sur la div
   const mapRef = useRef(null); // l'instance Leaflet elle-même
   const bombMarkersRef = useRef([]);
-  const mapMarkersRef = useRef({});
+    const mapMarkersRef = useRef({});
   const nextIdRef = useRef(0);
 
   // --- State (données affichées / qui doivent déclencher un re-render) ---
@@ -40,6 +40,7 @@ function StrategyMapPage() {
   const [allAgents, setAllAgents] = useState([]);
   const [strategyElements, setStrategyElements] = useState([]);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // --- Valeurs dérivées (computed) ---
   const reinforcementsCount = useMemo(
@@ -572,15 +573,21 @@ function StrategyMapPage() {
     });
 
     const init = async () => {
-      const { mapData, agentsData } = await fetchData();
-      if (mapData) fetchMapDetails(mapData);
+      try {
+        const { mapData, agentsData } = await fetchData();
+        if (mapData) {
+          await fetchMapDetails(mapData);
+        }
 
-      if (editIdParam) {
-        setEditMode(true);
-        setEditId(editIdParam);
-        await hydrateStrategy(editIdParam, false, agentsData);
-      } else if (duplicateId) {
-        await hydrateStrategy(duplicateId, true, agentsData);
+        if (editIdParam) {
+          setEditMode(true);
+          setEditId(editIdParam);
+          await hydrateStrategy(editIdParam, false, agentsData);
+        } else if (duplicateId) {
+          await hydrateStrategy(duplicateId, true, agentsData);
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -676,7 +683,23 @@ function StrategyMapPage() {
   };
 
   return (
-    <div className="px-8 main-bg-color flex-1">
+    <div className="relative px-8 main-bg-color flex-1">
+      {isLoading && (
+        <div
+          className="fixed inset-0 z-1000 flex items-center justify-center bg-[#12141A]/95 text-[#ECEAE4]"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex items-center gap-4 text-lg text-[#8B909B]">
+            <span
+              className="h-8 w-8 animate-spin rounded-full border-4 border-[#2A2E37] border-t-[#db9e15]"
+              aria-hidden="true"
+            />
+            <span>{t("loading")}</span>
+          </div>
+        </div>
+      )}
+
       <StrategyControl
         titreStrategy={titreStrategy}
         onTitreStrategyChange={setTitreStrategy}
