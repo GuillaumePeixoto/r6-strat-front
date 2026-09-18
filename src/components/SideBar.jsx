@@ -1,7 +1,7 @@
 import AgentCard from './AgentCard';
 import { useTranslation } from 'react-i18next';
 
-function Sidebar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
+function SideBar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
   const { t } = useTranslation();
   return (
     <div className="sidebar pe-4 h-full overflow-y-auto">
@@ -34,4 +34,4 @@ function Sidebar({ activeAgents, onRemoveAgent, onAddGadget, onAddUtility }) {
   );
 }
 
-export default Sidebar;
+export default SideBar;

@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 import api from "../services/api";
 import AgentSelector from "../components/AgentSelector";
 import StrategyControl from "../components/StrategyControl";
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import { ToastContext } from "../context/toast.context";
@@ -694,7 +694,7 @@ function StrategyMapPage() {
       />
 
       <div className="my-4 flex flex-row gap-2">
-        <Sidebar
+        <SideBar
           activeAgents={activeAgents}
           onRemoveAgent={removeAgentInstance}
           onAddGadget={addGadgetToMap}
